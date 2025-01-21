@@ -1,3 +1,5 @@
+/**task #5 */
+
 "use strict";
 
 let counter = 0;

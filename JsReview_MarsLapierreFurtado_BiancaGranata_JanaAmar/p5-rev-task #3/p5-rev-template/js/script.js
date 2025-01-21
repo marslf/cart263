@@ -1,3 +1,5 @@
+/**task #3 */
+
 "use strict";
 
 let firstRectx = 10;
