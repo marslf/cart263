@@ -95,7 +95,7 @@ function setup() {
     const firstH2Text = allH2Elements[0].textContent;
     console.log(firstH2Text);
     */
-    /***OUTPUT: 
+    /***OUTPUT:
      * NodeList [h2]0: h2length: 1[[Prototype]]: NodeListentries: ƒ entries()forEach: ƒ forEach()item: ƒ item()keys: ƒ keys()length: (...)values: ƒ values()constructor: ƒ NodeList()Symbol(Symbol.iterator): ƒ values()Symbol(Symbol.toStringTag): "NodeList"get length: ƒ length()[[Prototype]]: Object
      script.js:97 1
      script.js:99  The header of this fancy page
@@ -103,12 +103,16 @@ function setup() {
 
     /*************************************** */
     /* 6: the element with id name parent */
-    /***CODE */
-    /***OUTPUT: 
+    /***CODE
+     *     const parentElement = document.getElementById("parent");
+    console.log(parentElement);
+    */
+    /***OUTPUT:
+     * script.js:5 we are a go!
+script.js:111 <section id=​"parent">​flex<div class=​"inner-container">​<div class=​"content-container">​flex<div class=​"img-container">​…​</div>​flex<p id=​"2" class=​"img-descript">​…​</p>​</div>​</div>​<div class=​"inner-container">​<div class=​"content-container">​flex<div class=​"img-container">​…​</div>​flex<p id=​"3" class=​"img-descript">​…​</p>​</div>​</div>​<div class=​"inner-container">​<div class=​"content-container">​flex<div class=​"img-container">​…​</div>​flex<p id=​"4" class=​"img-descript">​…​</p>​</div>​</div>​<div class=​"inner-container">​<div class=​"content-container">​flex<div class=​"img-container">​…​</div>​flex<p id=​"5" class=​"img-descript">​…​</p>​</div>​</div>​<div class=​"inner-container">​<div class=​"content-container">​flex<div class=​"img-container">​…​</div>​flex<p id=​"6" class=​"img-descript">​…​</p>​</div>​</div>​<div class=​"inner-container">​<div class=​"content-container">​flex<div class=​"img-container">​…​</div>​flex<p id=​"7" class=​"img-descript">​…​</p>​</div>​</div>​<div class=​"inner-container">​<div class=​"content-container">​flex<div class=​"img-container">​…​</div>​flex<p id=​"8" class=​"img-descript">​…​</p>​</div>​</div>​<div class=​"inner-container">​<div class=​"content-container">​flex<div class=​"img-container">​…​</div>​flex<p id=​"9" class=​"img-descript">​…​</p>​</div>​</div>​</section>​
+
      * 
      */
-    const parentElement = document.getElementById("parent");
-    console.log(parentElement);
 
     /*************************************** */
     /*** END PART ONE ACCESS */
