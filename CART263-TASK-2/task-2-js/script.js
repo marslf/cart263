@@ -116,6 +116,27 @@ function setup() {
   */
   let colorButtons = document.querySelectorAll(".color-button");
 
+  //this for loop applies to each button
+  //i acts as a variable representing each buttoon that gets put in as the array of the function, increasing each time
+  for (let i = 0; i < colorButtons.length; i++) {
+    colorButtons[i].addEventListener("click", function (e) {
+      //used to identify the clicked colorbuttons id/name
+      console.log(colorButtons[i].getAttribute("id"))
+      //the current presets color variable exists and gains the same color id as the clicked color button
+      currentPresets.color = colorButtons[i].getAttribute("id")
+      //checking this
+      console.log(currentPresets.color)
+      //now changing all the points to be the same color
+      //need a variable representing them all
+      let points = document.querySelectorAll(".point")
+      //for loop targetting each point in the array
+      for (let point of points) {
+        //the background/color is equal to the same color as our current preset color
+        point.style.background = currentPresets.color
+      }
+    });
+  }
+
   /*B:: STROKE BUTTON ********************************************/
   /* TO DO: 
   *  1: Access the stroke button and assign an event listener to listen for the click event
@@ -126,6 +147,24 @@ function setup() {
      and change their current stroke value to the updated value.
   */
   let strokeButton = document.querySelector("#change-stroke-button");
+
+  strokeButton.addEventListener('click', clickStroke)
+
+  function clickStroke() {
+    let pointValue = document.getElementsByClassName('point');
+    console.log(pointValue)
+    if (currentPresets.stroke < 10) {
+      currentPresets.stroke += 1
+    } else {
+      currentPresets.stroke = 1
+    }
+    for (let i = 0; i < pointValue.length; i++) {
+      pointValue[i].style.width = currentPresets.stroke + "px";
+      pointValue[i].style.height = currentPresets.stroke + "px";
+    }
+    console.log(currentPresets.stroke);
+    strokeButton.querySelector('p').textContent = currentPresets.stroke;
+  }
 
   /*C:: SHAPE BUTTON ********************************************/
   /* TO DO: 
@@ -140,6 +179,32 @@ function setup() {
   */
   let shapeButton = document.querySelector("#change-shape-button");
 
+  shapeButton.addEventListener("click", squareShape);
+
+  function squareShape(e) {
+    changeShape();
+    function changeShape() {
+      const points = document.querySelectorAll(".point");
+      if (currentPresets.shape === "square") {
+        currentPresets.shape = "circle"
+        currentPresets.borderRadius = "5px";
+        shapeButton.innerHTML = "circle";
+        for (let i = 0; i < points.length; i++) {
+          document.querySelectorAll(".point")[i].style.borderRadius = "5px";
+        }
+        console.log(currentPresets.shape);
+      }
+      else {
+        currentPresets.shape = "square";
+        currentPresets.borderRadius = "0px";
+        shapeButton.innerHTML = "square";
+        for (let i = 0; i < points.length; i++) {
+          document.querySelectorAll(".point")[i].style.borderRadius = "0px";
+        }
+        console.log(currentPresets.shape);
+      }
+    }
+  }
 
   /*D:: CHANGE DRAWING MODE ********************************************/
   /* TO DO: 
@@ -154,6 +219,32 @@ function setup() {
   *   turn drawing off it is on or on if it is off (when the drawing mode is mouse-move)
   */
   let modeButton = document.querySelector("#change-mode-button");
+
+  modeButton.addEventListener("click", function () {
+    //console.log("you click");
+    //console.log("current mode is: " + currentPresets.drawingMode);
+    //console.log(modeButton.textContent);
+    if (currentPresets.drawingMode === "mouse-move") {
+      currentPresets.drawingMode = "mouse-click";
+      this.querySelector('p').textContent = "mouse-click"
+      // this.textContent = "mouse-click";
+    }
+    else if (currentPresets.drawingMode === "mouse-click") {
+      currentPresets.drawingMode = "mouse-move";
+      // this.textContent = "mouse-move";
+      this.querySelector('p').textContent = "mouse-move"
+    }
+
+    pCanvas.addEventListener("click", function (event) {
+      if (currentPresets.drawingMode === "mouse-move") {
+        currentPresets.isDrawing = !currentPresets.isDrawing;
+      }
+      else if (currentPresets.drawingMode === "mouse-click") {
+        createNewDrawingPoint(event.clientX, event.clientY);
+      }
+    });
+
+  });
 
   /*E:: OPACITY BUTTON ********************************************/
   /* TO DO: 
@@ -180,7 +271,7 @@ function setup() {
     }
 
     //2: UPDATE BUTTON
- opacityButton.querySelector('p').textContent=currentPresets.opacity.toFixed(1);
+    opacityButton.querySelector('p').textContent = currentPresets.opacity.toFixed(1);
 
     //3:CHANGE CURRENT POINTS
     // access all elements with the class "point"
@@ -194,8 +285,6 @@ function setup() {
     console.log(`Updated opacity: ${currentPresets.opacity}`);
   }
 
-}
-
   /*F:: ERASE BUTTON ********************************************/
   /* TO DO: 
   *  1: Access the erase button and assign an event listener to listen for the click event
@@ -203,4 +292,16 @@ function setup() {
   *  remove all points (hint: they all have the class name `point`) from the drawing div
   */
 
- //end setup
+  document.getElementById("change-erase-button").addEventListener("click", function () {
+
+    console.log("erase button clicked");
+
+    let points = document.querySelectorAll(".point");
+    points.forEach((point) => {
+      point.remove();
+    });
+  });
+
+
+}
+//end setup
