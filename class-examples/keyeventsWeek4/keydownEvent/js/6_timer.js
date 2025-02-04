@@ -36,19 +36,19 @@ window.onload = function () {
     // //the divisor
     // let num = 2;
 
-    // //ALTERNATING ROWS (j)
-    // //if the remainder is 0 = set a type of background and if the remainder is 1 = set different background
-    // // for (let i = 0; i < 24; i++) {
-    // //     for (let j = 0; j < 24; j++) {
-    // //         //check the j--> y value for color choice (all same ys will have the same color (a row))
-    // //         let d = gridArray[i][j];
-    // //         if (j % num === 0) {
-    // //             d.style.background = shades[0];
-    // //         } else if (j % num === 1) {
-    // //             d.style.background = shades[1];
-    // //         }
-    // //     }
-    // // }
+    //ALTERNATING ROWS (j)
+    //if the remainder is 0 = set a type of background and if the remainder is 1 = set different background
+    // for (let i = 0; i < 24; i++) {
+    //     for (let j = 0; j < 24; j++) {
+    //         //check the j--> y value for color choice (all same ys will have the same color (a row))
+    //         let d = gridArray[i][j];
+    //         if (j % num === 0) {
+    //             d.style.background = shades[0];
+    //         } else if (j % num === 1) {
+    //             d.style.background = shades[1];
+    //         }
+    //     }
+    // }
 
     // // //ALTERNATING COLUMN (i)
     // // for (let i = 0; i < 24; i++) {

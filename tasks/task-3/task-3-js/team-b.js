@@ -71,7 +71,7 @@ function setup_B() {
       }
     } //for
   }
-   /**************** ANI A ************************************ */
+  /**************** ANI A ************************************ */
   /** PUT ALL YOUR CODE FOR ANIMATION A INSIDE  HERE */
   /**************** ANI A ************************************ */
   /**************** TASK *******************************************
@@ -110,25 +110,85 @@ function setup_B() {
    * remember you can define other functions inside....
    * Do not change any code above or the HTML markup.
    * **/
+
+  /** BRAINSTORM
+   * grid of circles/squares 
+   * opt: when nothing is happening: grow small-big
+   * if clicked: start switching colors from an array every 500ms 
+   * opt: if clicked again: stops 
+   */
+
   function aniB(parentCanvas) {
     console.log("in B");
+
+    let boundingBoxParent = parentCanvas.getBoundingClientRect();
+    console.log(boundingBoxParent);
+    const rectangles = [];
+
+    for (let i = 20; i < boundingBoxParent.width; i += 20) {
+      for (let j = 20; j < boundingBoxParent.height; j += 20) {
+
+        let rect = document.createElement("div");
+        rect.classList.add("TEAM_A_a_cell");
+        parentCanvas.appendChild(rect);
+        rect.style.left = `${j}px`;
+        rect.style.top = `${i}px`;
+        rect.style.width = "12px";
+        rect.style.height = "10px";
+        rect.style.opacity = 1;
+
+        
+      }
+
+    }
+
+    window.setInterval(changeColor, 500);
+
+
+    function changeColor() { //. = class
+      let aniBarray = document.querySelectorAll(".TEAM_A_a_cell");
+
+      let shades = [ //array of shades
+        "#7fb3d5",
+        "#76d7c4",
+        "#f7dc6f",
+        "#eb984e",
+        "#cb4335",
+        "#8e44ad",
+        "#2e4053",
+        "#e5e7e9",
+      ];
+
+      for (let i = 0; i < aniBarray.length; i += 1) {
+        aniBarray[i].style.background = shades[Math.floor(Math.random() * shades.length)];
+
+      }
+      console.log(aniBarray[0].style.background)
+    }
+
   }
+
+
+
+
+
+
   /**************** ANI C ************************************ */
   /** PUT ALL YOUR CODE FOR INTERACTIVE PATTERN C INSIDE  HERE */
   /**************** ANI C ************************************ */
- /**************** TASK *******************************************
-   * YOU CAN USE ALL NOTES --- and see my examples in team-h.js for inspiration and possibly help:)
-   * 1: use the PROVIDED keyup/down callbacks `windowKeyDownRef` and/or `windowKeyUpnRef` to handle keyboard events
-   * 2: create an interactive pattern/sketch based on keyboard input. Anything goes.
-   * do not use  requestAnimationFrame(), setInterval() nor setTimeout() -> meaning keep it simple ;)
-   * 
-   * NOTE::: PLEASE::: if you add any custom css PLEASE use the style.css and prefix any class names with your team label
-   * i.e. you want to create a custom div class and you are in "Team_A" then call your class TEAM_A_ANI_A_Div -
-   * this is so that your styles are not overriden by other teams.
-   * NOTE::: All your code is to be added here inside this function -
-   * remember you can define other functions inside....
-   * Do not change any code above or the HTML markup.
-   * **/
+  /**************** TASK *******************************************
+    * YOU CAN USE ALL NOTES --- and see my examples in team-h.js for inspiration and possibly help:)
+    * 1: use the PROVIDED keyup/down callbacks `windowKeyDownRef` and/or `windowKeyUpnRef` to handle keyboard events
+    * 2: create an interactive pattern/sketch based on keyboard input. Anything goes.
+    * do not use  requestAnimationFrame(), setInterval() nor setTimeout() -> meaning keep it simple ;)
+    * 
+    * NOTE::: PLEASE::: if you add any custom css PLEASE use the style.css and prefix any class names with your team label
+    * i.e. you want to create a custom div class and you are in "Team_A" then call your class TEAM_A_ANI_A_Div -
+    * this is so that your styles are not overriden by other teams.
+    * NOTE::: All your code is to be added here inside this function -
+    * remember you can define other functions inside....
+    * Do not change any code above or the HTML markup.
+    * **/
 
 
   function aniC(parentCanvas) {
@@ -146,7 +206,7 @@ function setup_B() {
 
     /*** THIS IS THE CALLBACK FOR KEY UP ( DO NOT CHANGE THE NAME..) */
     windowKeyUpRef = function (e) {
-    //SAMPLE KEY CHECK (you do not have to use)
+      //SAMPLE KEY CHECK (you do not have to use)
       if (e.code === "Space") {
         console.log("space up");
         console.log("team-space up")
@@ -159,3 +219,5 @@ function setup_B() {
     window.addEventListener("keyup", windowKeyUpRef);
   }
 }
+
+
