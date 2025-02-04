@@ -105,17 +105,12 @@ h5 {
 }
 
 /* CSS TEAM B **/
-.TEAM_A_a_cell {
+.TEAM_B_b_cell {
   width: 20px;
   height: 20px;
   background-color: #7fb3d5;
   position: absolute;
   transform: translate(-50%, -50%);
-}
-
-.TEAM_A_a_cell:hover {
-  background-color: #000;
-
 }
 
 /*CSS TEAM H**/

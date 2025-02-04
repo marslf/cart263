@@ -129,7 +129,7 @@ function setup_B() {
       for (let j = 20; j < boundingBoxParent.height; j += 20) {
 
         let rect = document.createElement("div");
-        rect.classList.add("TEAM_A_a_cell");
+        rect.classList.add("TEAM_B_b_cell");
         parentCanvas.appendChild(rect);
         rect.style.left = `${j}px`;
         rect.style.top = `${i}px`;
@@ -156,7 +156,7 @@ function setup_B() {
 
 
     function changeColor() {
-      let aniBarray = document.querySelectorAll(".TEAM_A_a_cell");
+      let aniBarray = document.querySelectorAll(".TEAM_B_b_cell");
 
       let shades = [
         "#7fb3d5",
