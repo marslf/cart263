@@ -124,7 +124,7 @@ function setup_B() {
     let boundingBoxParent = parentCanvas.getBoundingClientRect();
     console.log(boundingBoxParent);
     const rectangles = [];
-
+    //grid taken and adapted from H example 
     for (let i = 20; i < boundingBoxParent.width; i += 20) {
       for (let j = 20; j < boundingBoxParent.height; j += 20) {
 
@@ -137,7 +137,17 @@ function setup_B() {
         rect.style.height = "10px";
         rect.style.opacity = 1;
 
-        
+        //attribute = square "locked" (clicked) or not
+        rect.setAttribute('data-locked', 'false');
+
+        // for each rect = check if clicked 
+        rect.addEventListener("click", (event) => {
+          // Toggle locked state 
+          const isLocked = event.target.getAttribute('data-locked') === 'true';
+          event.target.setAttribute('data-locked', 'true');
+          // border if locked
+          event.target.style.border = '1px solid black';
+        });
       }
 
     }
@@ -145,10 +155,10 @@ function setup_B() {
     window.setInterval(changeColor, 500);
 
 
-    function changeColor() { //. = class
+    function changeColor() {
       let aniBarray = document.querySelectorAll(".TEAM_A_a_cell");
 
-      let shades = [ //array of shades
+      let shades = [
         "#7fb3d5",
         "#76d7c4",
         "#f7dc6f",
@@ -160,8 +170,10 @@ function setup_B() {
       ];
 
       for (let i = 0; i < aniBarray.length; i += 1) {
-        aniBarray[i].style.background = shades[Math.floor(Math.random() * shades.length)];
-
+        // Only change color if square not locked
+        if (aniBarray[i].getAttribute('data-locked') !== 'true') {
+          aniBarray[i].style.background = shades[Math.floor(Math.random() * shades.length)];
+        }
       }
       console.log(aniBarray[0].style.background)
     }
