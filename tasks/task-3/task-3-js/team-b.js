@@ -91,7 +91,95 @@ function setup_B() {
 
   function aniA(parentCanvas) {
     console.log("in A");
+
+    // Create the GO button
+    let button = document.createElement("div");
+    button.classList.add("TEAM_B_box");
+    button.textContent = "GO";
+    parentCanvas.appendChild(button);
+
+    let isAnimating = false;
+    let squares = [];
+    let aniRef = null;
+    let moveX = 1, moveY = 1;
+    let boundaryWidth = 375;
+    let boundaryHeight = 375;
+
+    createSquare();
+
+    function createSquare() {
+      let offset = 45;
+      for (let i = 0; i < 15; i++) {
+        for (let j = 0; j < 15; j++) {
+          let square = document.createElement("div");
+          square.classList.add("TEAM_B_square");
+          square.style.width = '20px';
+          square.style.height = '20px';
+          square.style.position = 'absolute';
+          square.style.left = offset + i * 15 + "px";
+          square.style.top = offset + j * 15 + "px";
+          parentCanvas.appendChild(square);
+          squares.push(square);
+        }
+      }
+    }
+
+    button.addEventListener("click", animationHandler);
+    function animationHandler() {
+      if (!isAnimating) {
+        squares.forEach(square => square.style.display = "block");
+        isAnimating = true;
+        button.textContent = 'STOP';
+        aniRef = window.requestAnimationFrame(animate);
+      } else {
+        cancelAnimationFrame(aniRef);
+        isAnimating = false;
+        button.textContent = 'GO';
+      }
+    }
+
+    function animate() {
+      console.log('Animating');
+
+      for (let i = squares.length - 1; i >= 0; i--) {
+        let square = squares[i];
+
+        if (!square) continue;
+
+        let left = parseInt(square.style.left) + moveX;
+        let top = parseInt(square.style.top) + moveY;
+
+        if (left <= 0 || left >= boundaryWidth - 20) {
+          moveX *= -1;
+          detachSquare(i);
+        }
+        if (top <= 0 || top >= boundaryHeight - 20) {
+          moveY *= -1;
+          detachSquare(i);
+        }
+
+        square.style.left = left + "px";
+        square.style.top = top + "px";
+      }
+
+      aniRef = window.requestAnimationFrame(animate);
+    }
+
+    function detachSquare(index) {
+      if (index >= 0 && index < squares.length) {
+        let detachedSquare = squares.splice(index, 1)[0];
+        if (!detachedSquare) return;
+        detachedSquare.style.transition = "opacity 0.5s ease-out";
+        detachedSquare.style.opacity = "0";
+        setTimeout(() => {
+          if (parentCanvas.contains(detachedSquare)) {
+            parentCanvas.removeChild(detachedSquare);
+          }
+        }, 500);
+      }
+    }
   }
+
   /**************** ANI B ************************************ */
   /** PUT ALL YOUR CODE FOR ANIMATION B INSIDE  HERE */
   /**************** ANI B ************************************ */
@@ -205,23 +293,44 @@ function setup_B() {
 
   function aniC(parentCanvas) {
 
+
     console.log("in C");
-    /*** THIS IS THE CALLBACK FOR KEY DOWN ( DO NOT CHANGE THE NAME..) */
+
+    let screamBox = document.createElement("div");
+    screamBox.classList.add("TEAM_B_box_word");
+    parentCanvas.appendChild(screamBox);
+
+    /* THIS IS THE CALLBACK FOR KEY DOWN ( DO NOT CHANGE THE NAME..) */
     windowKeyDownRef = function (e) {
       //code for key down in here
       console.log(e)
       //SAMPLE KEY CHECK (you do not have to use)
       if (e.code === "Space") {
+        //let screamWord = document.createElement("span")
+
+        // screamWord.textContent = randomWord[0];
+        //screamWord.classList.add("TEAM_B_angry_word")
+
+        screamBox.textContent = "AHHHHHH";
+        screamBox.style.background = "rgb(161, 114, 114)";
+        screamBox.style.color = "rgb(81, 10, 10)";
+        screamBox.style.font.size = "60px"
+        console.log(screamBox);
         console.log("team-space down")
       }
     };
 
-    /*** THIS IS THE CALLBACK FOR KEY UP ( DO NOT CHANGE THE NAME..) */
+    // THIS IS THE CALLBACK FOR KEY UP ( DO NOT CHANGE THE NAME..) */
     windowKeyUpRef = function (e) {
       //SAMPLE KEY CHECK (you do not have to use)
       if (e.code === "Space") {
         console.log("space up");
         console.log("team-space up")
+
+        screamBox.textContent = "...";
+        screamBox.style.background = "white";
+        screamBox.style.font.size = "10px"
+        screamBox.style.color = "rgb(39, 72, 80)";
       }
 
     };
@@ -229,7 +338,5 @@ function setup_B() {
     //DO NOT REMOVE
     window.addEventListener("keydown", windowKeyDownRef);
     window.addEventListener("keyup", windowKeyUpRef);
-  }
+  };
 }
-
-

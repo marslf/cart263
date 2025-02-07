@@ -113,6 +113,46 @@ h5 {
   transform: translate(-50%, -50%);
 }
 
+.TEAM_B_box_word {
+  font-size: 60px;
+  font-weight: 600;
+  color: rgb(203, 167, 106);
+  text-align: center;
+  margin-top: 500px;
+  margin: 30px;
+  padding: 10px;
+
+  width: 300px;
+  height: 200px;
+  background-color: rgb(255, 255, 255);
+  position: center;
+}
+
+.TEAM_B_box {
+  width: 45px;
+  height: 30px;
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+  text-align: center;
+  padding-top: 8px;
+  margin: 1px;
+}
+
+.TEAM_B_square {
+  height: 20px;
+  width: 20px;
+  background-color: blue;
+  display: none;
+  translate: (-50%, -50%);
+}
+
+.TEAM_B_box:hover {
+  background-color: rgb(30, 168, 223);
+  cursor: pointer;
+
+}
+
 /*CSS TEAM H**/
 
 .TEAM_H_box {
