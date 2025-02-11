@@ -4,7 +4,7 @@ class Bee {
         this.y = y;
         this.size = Math.random() * 5 + 10; //random between 5-15
         this.beeColor = beeColor;
-        this.speed = Math.random() * 0.6 + 0.2; //random between 0.2 to 0.8
+        this.speed = Math.random() * 0.9 + 0.2; //random between 0.2 to 1.1
         this.beeDiv = document.createElement("div");
         this.wingsDiv = document.createElement("div");
         this.animationId = null;
@@ -30,7 +30,7 @@ class Bee {
     //render method
     renderBee() {
 
-        //main body 
+        //bee main body 
         this.beeDiv.classList.add("bee");
         this.beeDiv.style.width = this.size + "px";
         this.beeDiv.style.height = this.size + "px";
@@ -39,8 +39,21 @@ class Bee {
         this.beeDiv.style.borderRadius = "50%";
         this.beeDiv.style.left = this.x + "px";
         this.beeDiv.style.top = this.y + "px";
-        this.beeDiv.style.transition = "transform 0.3s";
-        document.querySelector(".sky").appendChild(this.beeDiv);
+        this.beeDiv.style.border = "2px solid black";
+
+
+        //bee wings
+        this.wingsDiv.style.width = (this.size * 0.8) + "px";
+        this.wingsDiv.style.height = (this.size * 0.8) + "px";
+        this.wingsDiv.style.background = "rgba(255, 255, 255, 0.8)";
+        this.wingsDiv.style.position = "absolute";
+        this.wingsDiv.style.borderRadius = "50%";
+        this.wingsDiv.style.left = "50%";
+        this.wingsDiv.style.top = "-30%";
+        this.wingsDiv.style.transform = "translateX(-50%)";
+
+        this.beeDiv.appendChild(this.wingsDiv); //add wings to bee body
+        document.querySelector(".sky").appendChild(this.beeDiv); //add bee to sky 
     };
 
 
@@ -52,7 +65,7 @@ class Bee {
             let distance = Math.sqrt(dx * dx + dy * dy);
 
             //slight delay / smoothing to movement 
-            let speedFactor = 0.05;
+            let speedFactor = 0.02;
 
             //update position
             if (distance > 1) {
