@@ -1,6 +1,6 @@
-window.onload = function (){
-// Our garden
-let garden = {
+window.onload = function () {
+  // Our garden
+  let garden = {
     // An array to store the individual flowers
     flowers: [],
     // How many flowers in the garden
@@ -16,7 +16,7 @@ let garden = {
       //the grass element
       grassDiv: document.createElement("div"),
     },
- 
+
     /*sky object */
     sky: {
       // The color of the sky (background)
@@ -28,9 +28,14 @@ let garden = {
       //the sky element
       skyDiv: document.createElement("div"),
     },
+
+    /*TEAM A - BEES*/
+    bees: [], // Array to store bees
+    numBees: 5  // Number of bees to create
+
   };
   // new  sun instancce
-  let sun =  new Sun(10,10,{r: 240, g: 206,b: 83})
+  let sun = new Sun(10, 10, { r: 240, g: 206, b: 83 })
 
   function createAndRenderTheGarden() {
     /* note how we use dot notation....*/
@@ -48,27 +53,44 @@ let garden = {
 
     //create some flowers
     for (let i = 0; i < garden.numFlowers; i++) {
-        // Create variables for our arguments for clarity
-        let x = Math.random() * (window.innerWidth);
-        let y = Math.random() * 120;
-        let size = Math.random() * 30 + 10;
-        let stemLength = Math.random() * 50 + 20;
-        let petalColor = {
-          r: parseInt(Math.random() * 155) + 100,
-          g: parseInt(Math.random() * 155) + 100,
-          b: parseInt(Math.random() * 155) + 100,
-        };
-  
-        // Create a new flower using the arguments
-        let flower = new Flower(x, y, size, stemLength, petalColor);
-        // Add the flower to the array of flowers
-        garden.flowers.push(flower);
-      }
+      // Create variables for our arguments for clarity
+      let x = Math.random() * (window.innerWidth);
+      let y = Math.random() * 120;
+      let size = Math.random() * 30 + 10;
+      let stemLength = Math.random() * 50 + 20;
+      let petalColor = {
+        r: parseInt(Math.random() * 155) + 100,
+        g: parseInt(Math.random() * 155) + 100,
+        b: parseInt(Math.random() * 155) + 100,
+      };
 
-      for (let i = 0; i < garden.numFlowers; i++) {
-        // Add the flower to the array of flowers
-        garden.flowers[i].renderFlower();
-      }
+      // Create a new flower using the arguments
+      let flower = new Flower(x, y, size, stemLength, petalColor);
+      // Add the flower to the array of flowers
+      garden.flowers.push(flower);
+    }
+
+    for (let i = 0; i < garden.numFlowers; i++) {
+      // Add the flower to the array of flowers
+      garden.flowers[i].renderFlower();
+    }
+
+    //TEAM A - BEES
+    for (let i = 0; i < garden.numBees; i++) {
+      let x = Math.random() * window.innerWidth;
+      let y = Math.random() * (window.innerHeight / 2); // Keep in sky area
+      let beeColor = {
+        r: 255,
+        g: 215,
+        b: 0
+      };
+
+      let bee = new Bee(x, y, beeColor);
+      garden.bees.push(bee);
+      bee.renderBee();
+      bee.animateBee();
+    }
+
   }
   createAndRenderTheGarden();
 
