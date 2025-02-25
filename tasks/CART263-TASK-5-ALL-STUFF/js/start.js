@@ -46,6 +46,22 @@ function go_all_stuff() {
     drawingBoardD.addObj(videoObjInstance);
     drawingBoardD.display();
 
+    //TASK 3
+    let audioContext, analyser, microphone;
+
+    // Request microphone access
+    navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(function (stream) {
+            audioContext = new AudioContext();
+            analyser = audioContext.createAnalyser();
+            microphone = audioContext.createMediaStreamSource(stream);
+            microphone.connect(analyser);
+            analyser.fftSize = 256; // Adjust for more/less detailed analysis
+        })
+        .catch(function (err) {
+            console.error("had an error getting the microphone", err);
+        });
+
     //TASK 4 : mouse interactions event listener 
     let videoCanvas = theCanvases[3];
     videoCanvas.addEventListener("mousemove", function (event) {
@@ -66,10 +82,25 @@ function go_all_stuff() {
 
     function animationLoop() {
         /*** CALL THE EACH CANVAS TO ANIMATE INSIDE  */
+        let microphoneData = null;
+        if (analyser) {
+            let dataArray = new Uint8Array(analyser.frequencyBinCount);
+            analyser.getByteFrequencyData(dataArray);
+
+            // Calculate average volume and frequency
+            let volume = dataArray.reduce((sum, value) => sum + value, 0) / dataArray.length;
+            let frequency = dataArray.indexOf(Math.max(...dataArray));
+
+            microphoneData = {
+                volume: volume / 255, // Normalize to 0-1
+                frequency: frequency
+            };
+        }
+
         drawingBoardA.animate();
         drawingBoardB.animate();
-        drawingBoardC.animate();
-        drawingBoardD.run(videoEl)
+        drawingBoardC.animate(microphoneData); // Pass microphone data to Drawing Board C
+        drawingBoardD.run(videoEl);
         window.requestAnimationFrame(animationLoop);
     }
 
