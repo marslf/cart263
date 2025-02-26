@@ -15,6 +15,12 @@ class DrawingBoard {
     this.canvas.addEventListener("mousemove", function (e) {
       self.overCanvas(e);
     });
+
+    // Right-click listener for object removal (Task 1)
+    this.canvas.addEventListener("contextmenu", function (e) {
+      e.preventDefault(); // Prevent the default context menu
+      self.rightClickCanvas(e);
+    });
   }
 
   /* Handle mouse move events */
@@ -25,7 +31,9 @@ class DrawingBoard {
 
     // Differentiate which canvas
     if (this.drawingBoardId === "partA") {
-      // Handle mouse move for Drawing Board A
+      // Update circular objects based on mouse position (Task 1)
+      this.objectsOnCanvas.forEach(obj => obj.update(this.mouseOffsetX, this.mouseOffsetY));
+      this.animate();
     }
     if (this.drawingBoardId === "partB") {
       // Handle mouse move for Drawing Board B
@@ -46,7 +54,11 @@ class DrawingBoard {
 
     // Differentiate which canvas
     if (this.drawingBoardId === "partA") {
-      // Handle click for Drawing Board A
+      // Add a new circular object on click (Task 1)
+      const radius = 20; // Fixed or random radius
+      const color = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+      this.addObj(new CircularObj(this.mouseOffsetX, this.mouseOffsetY, radius, color, '#000', this.context));
+      this.display(); // Re-draw to show new object
     }
     if (this.drawingBoardId === "partB") {
       // Handle click for Drawing Board B
@@ -59,6 +71,19 @@ class DrawingBoard {
     }
   }
 
+  /* Handle right-click events (Task 1) */
+  rightClickCanvas(e) {
+    this.canvasBoundingRegion = this.canvas.getBoundingClientRect();
+    const x = parseInt(e.clientX - this.canvasBoundingRegion.x);
+    const y = parseInt(e.clientY - this.canvasBoundingRegion.y);
+
+    // Remove objects if right-clicked on them (Task 1)
+    this.objectsOnCanvas = this.objectsOnCanvas.filter(obj =>
+      Math.sqrt(Math.pow(obj.x - x, 2) + Math.pow(obj.y - y, 2)) > obj.radius
+    );
+    this.display(); // Re-draw to show the updated set of objects
+  }
+
   /* Method to add an object to the canvas */
   addObj(objToAdd) {
     this.objectsOnCanvas.push(objToAdd);
@@ -66,23 +91,26 @@ class DrawingBoard {
 
   /* Method to display objects on the canvas */
   display() {
-    for (let i = 0; i < this.objectsOnCanvas.length; i++) {
-      this.objectsOnCanvas[i].display();
-    }
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.objectsOnCanvas.forEach(obj => obj.display());
   }
 
   /* Method to animate objects on the canvas */
   animate(microphoneData) {
-    // Clear the canvas before redrawing
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     // Update and display each object
     for (let i = 0; i < this.objectsOnCanvas.length; i++) {
-      this.objectsOnCanvas[i].update(microphoneData); // Pass microphone data
+      if (this.drawingBoardId === "partC" && microphoneData) {
+        // Pass microphone data to Drawing Board C (Task 3)
+        this.objectsOnCanvas[i].update(microphoneData);
+      } else {
+        // Default animation for other canvases
+        this.objectsOnCanvas[i].update();
+      }
       this.objectsOnCanvas[i].display();
     }
   }
-
 
   /* Method to run the video canvas (Drawing Board D) */
   run(videoElement) {

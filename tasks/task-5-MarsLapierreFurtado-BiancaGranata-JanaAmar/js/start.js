@@ -106,7 +106,7 @@ function go_all_stuff() {
 
 
 
-    /** TASK 1:(Drawing Board A) - 
+    /** TASK 1:(Drawing Board A) - Jana
      *  1: animate the circle object(s) somehow/anyhow.. (there may be more than one)
      * You can use the mouse coordinates - the canvas ALREADY has event listeners for mouse click and mouse move
      * implemeneted, as well as the proper mouseX and mouseY (NO need to add)
@@ -120,7 +120,7 @@ function go_all_stuff() {
      */
 
 
-    /** TASK 2:(Drawing Board B) - 
+    /** TASK 2:(Drawing Board B) - Bianca
      *  1: Affect the rectangle by input from the microphone somehow, in real time...
      *  at least two properties of the rectangle need to update and change...
      *  2: apply some arbitrary animation to the rectangle obj (change the properties in the update method provided)
@@ -128,7 +128,7 @@ function go_all_stuff() {
      *  
      */
 
-    /** TASK 3:(Drawing Board C) - 
+    /** TASK 3:(Drawing Board C) - Mars
      *  1: Affect the free-style shape by input from the microphone somehow, in real time...
      *  at least two properties of the free-style shape need to update and change...
      *  2: apply some arbitrary animation to the free-style shape (change the properties in the update method provided)
@@ -136,7 +136,7 @@ function go_all_stuff() {
      *  
      */
 
-    /** TASK 4:(Video - recorded - )
+    /** TASK 4:(Video - recorded - ) - Mars
      * // add filters or manipulate the pixels... take user input from the boxes..
      *  1: using thr provided VideoObj class - > 
      * you will see all the code needed for activating  a blur filter on the video - activate it

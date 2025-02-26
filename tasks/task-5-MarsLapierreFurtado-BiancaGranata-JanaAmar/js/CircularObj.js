@@ -8,13 +8,13 @@ class CircularObj {
     this.fill_color = f_color;
     this.stroke_color = s_color;
     this.startAngle = 0;
-    this.endAngle = Math.PI * 2; //full rotation
+    this.endAngle = Math.PI * 2; // Full rotation
     this.context = context;
   }
 
   display() {
-    this.context.fillStyle = this.fill_color; // change the color we are using
-    this.context.strokeStyle = this.stroke_color; // change the color we are using
+    this.context.fillStyle = this.fill_color; // Change the color we are using
+    this.context.strokeStyle = this.stroke_color; // Change the color we are using
     this.context.beginPath();
     this.context.arc(
       this.x,
@@ -24,15 +24,15 @@ class CircularObj {
       this.endAngle,
       true
     );
-    this.context.fill(); // set the fill
-    this.context.lineWidth = 2; //change stroke
+    this.context.fill(); // Set the fill
+    this.context.lineWidth = 2; // Change stroke
     this.context.closePath();
     this.context.stroke();
   }
 
-  update() {
-    //update circle
-    //this.x += 1;
-    //console.log("circle update");
+  update(mouseX, mouseY) {
+    // Move towards the mouse cursor by a step of 1 pixel
+    this.x += (mouseX - this.x) * 0.05;
+    this.y += (mouseY - this.y) * 0.05;
   }
 }
