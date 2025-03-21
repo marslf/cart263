@@ -8,6 +8,9 @@ function run() {
   async function fetchText() {
     console.log("in fetch");
 
+    //Event listener for reset button
+    document.querySelector("#resetButton").addEventListener("click", resetPoem);
+
     try {
       // Fetch the text file
       const response = await fetch("files/rainbow.txt");
@@ -105,35 +108,48 @@ function run() {
   /****** PART D:: VISUALIZE  */
   function runPartD(new_sentence) {
     console.log("Visualizing poem:", new_sentence);
-    
+
     // Un-hide the output div
     const outputDiv = document.querySelector("#output");
     outputDiv.style.display = "block";
-  
+
     // Clear previous content
     outputDiv.innerHTML = "";
-  
+
     // Iterate over each character in the new_sentence
     Array.from(new_sentence).forEach((char, index) => {
       // Create a span for each character
       const span = document.createElement("span");
       span.textContent = char;
-  
+
       // Add a dynamic style
       span.style.color = `hsl(${Math.random() * 360}, 100%, 50%)`; // Random color
       span.style.fontSize = `${Math.random() * 20 + 10}px`; // Random font size between 10px and 30px
-  
+
       // Append to the output element
       outputDiv.appendChild(span);
     });
   }
-  
+
   /****** PART E:: RESET  */
   function resetPoem() {
-    // Reset the UI
-    document.querySelector("#stepOneButton").style.display = "block"; // Show the button
-    document.querySelector("#inputDiv").style.display = "none"; // Hide the inputDiv
+    console.log("Resetting poem...");
+
+    // CLEAR the HTML from output
+    const outputDiv = document.querySelector("#output");
+    outputDiv.innerHTML = "";
+
+    // HIDE output
+    outputDiv.style.display = "none";
+
+    // CLEAR phrase
+    document.querySelector("#phrase").value = "";
+
+    // CLEAR any other elements and values based on visualization
     document.querySelector("#rainbow_text").innerText = ""; // Clear the displayed text
-    // Add any other reset logic here
+    document.querySelector("#inputDiv").style.display = "none"; // Hide the input div
+    document.querySelector("#stepOneButton").style.display = "block"; // Show the button again
+
+    console.log("Reset complete.");
   }
 }
