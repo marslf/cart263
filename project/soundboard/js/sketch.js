@@ -216,20 +216,20 @@ function keyPressed() {
         tambourineSound.play();
         createMovingStar();
     }
-    else if (key === '4') {
-        if (guitarSound) guitarSound.play();
-        createGuitarStars();
-    } else if (key === '5') {
-        if (electricPianoSound) electricPianoSound.play();
-        createLightning();
-    } else if (key === '6') {
-        if (cowbellSound) cowbellSound.play();
-        createTriangles();
-    } else if (key === '7') {
-        if (marimbaSound) marimbaSound.play();
-        createSwirls();
-    } else if (key === '8') {
-        if (mandolinSound) mandolinSound.play();
-        createSquares();
-    }
+    //     else if (key === '4') {
+    //         if (guitarSound) guitarSound.play();
+    //         createGuitarStars();
+    //     } else if (key === '5') {
+    //         if (electricPianoSound) electricPianoSound.play();
+    //         createLightning();
+    //     } else if (key === '6') {
+    //         if (cowbellSound) cowbellSound.play();
+    //         createTriangles();
+    //     } else if (key === '7') {
+    //         if (marimbaSound) marimbaSound.play();
+    //         createSwirls();
+    //     } else if (key === '8') {
+    //         if (mandolinSound) mandolinSound.play();
+    //         createSquares();
+    //     }
 }
