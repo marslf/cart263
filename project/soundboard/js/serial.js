@@ -1,6 +1,6 @@
 let serialPort;
-let latestData = "000000000";
-let buffer = ""; // new buffer to build complete lines
+let latestData = "000"; // Adjusted for 3 pins
+let buffer = ""; // buffer to build complete lines
 
 async function setupSerial() {
     if (!("serial" in navigator)) {
@@ -33,7 +33,8 @@ async function setupSerial() {
                     let cleanValue = line.trim();
                     console.log("Received serial data:", cleanValue);
 
-                    if (cleanValue.length === 9 && /^[01]+$/.test(cleanValue)) {
+                    // Check for 3-character string 
+                    if (cleanValue.length === 3 && /^[01]+$/.test(cleanValue)) {
                         latestData = cleanValue;
                     }
                 }

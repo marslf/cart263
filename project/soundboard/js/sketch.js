@@ -6,8 +6,8 @@ let stars = [];
 let duration = 3000;
 let beatInterval = 619;
 let lastBeatTime = 0;
-let lastMicrobitData = "000000000";
-// 'latestData' is assumed to be updated in serial.js using the Web Serial API.
+let lastMicrobitData = "000";
+
 
 function preload() {
     pianoSound = loadSound(
@@ -57,16 +57,16 @@ function draw() {
     background(0);
     let currentMillis = millis();
 
-    // If Micro:bit state has changed, compare the latest data with the previous state.
-    // (Ensure that 'latestData' is defined globally in serial.js.)
+    // Handle Micro:bit data
     if (typeof latestData !== 'undefined' && latestData !== lastMicrobitData) {
-        for (let i = 0; i < 9; i++) {
+        for (let i = 0; i < 3; i++) { // Loop through only the first 3 pins
             if (latestData[i] === '1' && lastMicrobitData[i] === '0') {
                 triggerEvent(i);
             }
         }
         lastMicrobitData = latestData;
     }
+
 
     // PIANO CIRCLE EFFECT
     for (let i = circles.length - 1; i >= 0; i--) {
