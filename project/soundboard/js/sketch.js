@@ -1,3 +1,4 @@
+// Global variables
 let pianoSound, drumSound, tambourineSound;
 let circles = [];
 let fireworks = [];
@@ -6,30 +7,46 @@ let duration = 3000;
 let beatInterval = 619;
 let lastBeatTime = 0;
 let lastMicrobitData = "000000000";
+// 'latestData' is assumed to be updated in serial.js using the Web Serial API.
 
 function preload() {
-    pianoSound = loadSound('assets/piano_med.mp3', () => {
-        console.log('Piano sound loaded successfully');
-    }, (err) => {
-        console.error('Failed to load piano sound:', err);
-    });
+    pianoSound = loadSound(
+        'assets/piano_med.mp3',
+        () => {
+            console.log('Piano sound loaded successfully');
+        },
+        (err) => {
+            console.error('Failed to load piano sound:', err);
+        }
+    );
 
-    drumSound = loadSound('assets/simple_drum_beat.mp3', () => {
-        console.log('Drum sound loaded successfully');
-    }, (err) => {
-        console.error('Failed to load drum sound:', err);
-    });
+    drumSound = loadSound(
+        'assets/simple_drum_beat.mp3',
+        () => {
+            console.log('Drum sound loaded successfully');
+        },
+        (err) => {
+            console.error('Failed to load drum sound:', err);
+        }
+    );
 
-    tambourineSound = loadSound('assets/tambourine.mp3', () => {
-        console.log('Tambourine sound loaded successfully');
-    }, (err) => {
-        console.error('Failed to load tambourine sound:', err);
-    });
+    tambourineSound = loadSound(
+        'assets/tambourine.mp3',
+        () => {
+            console.log('Tambourine sound loaded successfully');
+        },
+        (err) => {
+            console.error('Failed to load tambourine sound:', err);
+        }
+    );
 }
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
-    setupSerial();
+
+    let button = createButton('Connect Micro:bit');
+    button.position(10, 10); 
+    button.mousePressed(setupSerial);
 }
 
 function windowResized() {
@@ -40,8 +57,9 @@ function draw() {
     background(0);
     let currentMillis = millis();
 
-    // If Micro:bit state has changed
-    if (latestData !== lastMicrobitData) {
+    // If Micro:bit state has changed, compare the latest data with the previous state.
+    // (Ensure that 'latestData' is defined globally in serial.js.)
+    if (typeof latestData !== 'undefined' && latestData !== lastMicrobitData) {
         for (let i = 0; i < 9; i++) {
             if (latestData[i] === '1' && lastMicrobitData[i] === '0') {
                 triggerEvent(i);
@@ -104,37 +122,36 @@ function draw() {
                 fill(255, 255, 0, 255 - j * 50);
                 drawStar(trailX, trailY, 5, 10, 5);
             }
-
-        }
-        // Called when a button is pressed
-        function triggerEvent(index) {
-            switch (index) {
-                case 0:
-                    pianoSound.play();
-                    piano();
-                    break;
-                case 1:
-                    drumSound.play();
-                    createFirework();
-                    lastBeatTime = millis();
-                    break;
-                case 2:
-                    tambourineSound.play();
-                    createMovingStar();
-                    break;
-                case 3:
-                case 4:
-                case 5:
-                case 6:
-                case 7:
-                case 8:
-                    console.log("Button " + index + " pressed (no action assigned)");
-                    break;
-            }
         }
     }
 }
 
+// Moved outside of draw() to avoid redefinition during each frame.
+function triggerEvent(index) {
+    switch (index) {
+        case 0:
+            pianoSound.play();
+            piano();
+            break;
+        case 1:
+            drumSound.play();
+            createFirework();
+            lastBeatTime = millis();
+            break;
+        case 2:
+            tambourineSound.play();
+            createMovingStar();
+            break;
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+            console.log("Button " + index + " pressed (no action assigned)");
+            break;
+    }
+}
 
 function piano() {
     let numCircles = int(random(4, 11));

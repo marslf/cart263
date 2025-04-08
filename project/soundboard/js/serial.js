@@ -1,4 +1,6 @@
-let serialPort; 
+let serialPort;
+let latestData = "000000000";
+let buffer = ""; // new buffer to build complete lines
 
 async function setupSerial() {
     if (!("serial" in navigator)) {
@@ -7,31 +9,33 @@ async function setupSerial() {
     }
 
     try {
-        // Request a port and open it
         serialPort = await navigator.serial.requestPort();
         await serialPort.open({ baudRate: 115200 });
         console.log("Serial port opened");
 
-        // Create a reader to continuously read data
         const textDecoder = new TextDecoderStream();
         const readableStreamClosed = serialPort.readable.pipeTo(textDecoder.writable);
         const reader = textDecoder.readable.getReader();
 
-        // Continuously read data in a loop
         while (true) {
             const { value, done } = await reader.read();
             if (done) {
-                // Allow the serial port to be closed later.
                 reader.releaseLock();
                 break;
             }
             if (value) {
-                // Assume the micro:bit sends a 9-character string ending with a newline
-                const cleanValue = value.trim();
-                if (cleanValue.length === 9 && /^[01]+$/.test(cleanValue)) {
-                    latestData = cleanValue;
-                    // Log or trigger events using the updated latestData, if necessary
-                    // console.log("Received data:", latestData);
+                buffer += value; // accumulate incoming data
+
+                let lines = buffer.split("\n");
+                buffer = lines.pop(); // keep the unfinished line for next read
+
+                for (let line of lines) {
+                    let cleanValue = line.trim();
+                    console.log("Received serial data:", cleanValue);
+
+                    if (cleanValue.length === 9 && /^[01]+$/.test(cleanValue)) {
+                        latestData = cleanValue;
+                    }
                 }
             }
         }
