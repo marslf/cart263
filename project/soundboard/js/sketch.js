@@ -40,6 +40,16 @@ function draw() {
     background(0);
     let currentMillis = millis();
 
+    // If Micro:bit state has changed
+    if (latestData !== lastMicrobitData) {
+        for (let i = 0; i < 9; i++) {
+            if (latestData[i] === '1' && lastMicrobitData[i] === '0') {
+                triggerEvent(i);
+            }
+        }
+        lastMicrobitData = latestData;
+    }
+
     // PIANO CIRCLE EFFECT
     for (let i = circles.length - 1; i >= 0; i--) {
         let c = circles[i];
@@ -94,9 +104,37 @@ function draw() {
                 fill(255, 255, 0, 255 - j * 50);
                 drawStar(trailX, trailY, 5, 10, 5);
             }
+
+        }
+        // Called when a button is pressed
+        function triggerEvent(index) {
+            switch (index) {
+                case 0:
+                    pianoSound.play();
+                    piano();
+                    break;
+                case 1:
+                    drumSound.play();
+                    createFirework();
+                    lastBeatTime = millis();
+                    break;
+                case 2:
+                    tambourineSound.play();
+                    createMovingStar();
+                    break;
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                case 8:
+                    console.log("Button " + index + " pressed (no action assigned)");
+                    break;
+            }
         }
     }
 }
+
 
 function piano() {
     let numCircles = int(random(4, 11));
