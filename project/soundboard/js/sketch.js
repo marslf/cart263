@@ -39,16 +39,10 @@ function preload() {
             console.error('Failed to load tambourine sound:', err);
         }
     );
-
-    electricPianoSound = loadSound('assets/electricpiano.mp3');
-    cowbellSound = loadSound('assets/cowbell.mp3');
-    marimbaSound = loadSound('assets/marimba.mp3');
-    mandolinSound = loadSound('assets/mandolin.mp3');
 }
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
-    background(0);
 
     let button = createButton('Connect Micro:bit');
     button.position(10, 10);
@@ -60,7 +54,7 @@ function windowResized() {
 }
 
 function draw() {
-    background(0, 25);
+    background(0);
     let currentMillis = millis();
 
     // If Micro:bit state has changed, compare the latest data with the previous state.
@@ -73,16 +67,6 @@ function draw() {
         }
         lastMicrobitData = latestData;
     }
-
-    updateCircles(currentMillis);
-    updateFireworks(currentMillis);
-    updateTambourineStars(currentMillis);
-    updateStars(currentMillis);
-    updateLightning(currentMillis);
-    updateTriangles(currentMillis);
-    updateSwirls(currentMillis);
-    updateSquares(currentMillis);
-
 
     // PIANO CIRCLE EFFECT
     for (let i = circles.length - 1; i >= 0; i--) {
@@ -142,7 +126,7 @@ function draw() {
     }
 }
 
-
+// Moved outside of draw() to avoid redefinition during each frame.
 function triggerEvent(index) {
     switch (index) {
         case 0:
@@ -218,196 +202,34 @@ function drawStar(x, y, innerRadius, outerRadius, points) {
     endShape(CLOSE);
 }
 
-/**
- * STAR EFFECT (Key 4)
- * Yellow twinkling stars that last 8 seconds
- */
-function updateStars(currentMillis) {
-    for (let i = stars.length - 1; i >= 0; i--) {
-        let star = stars[i];
-        // Calculate age in seconds
-        let age = (currentMillis - star.birthTime) / 1000;
-
-        // Remove stars older than 8 seconds
-        if (age > 8) {
-            stars.splice(i, 1);
-            continue;
-        }
-
-        // Draw star with slight brightness variation
-        fill(255, 255, 0, 255 - random(0, 30));
-        ellipse(star.x, star.y, star.size, star.size);
-
-        // Random twinkling effect
-        if (random() < 0.1) star.size = random(2, 6);
-    }
-}
-
-/**
- * LIGHTNING EFFECT (Key 5)
- * Falling lightning bolts that fade out
- */
-function updateLightning(currentMillis) {
-    for (let i = lightningBolts.length - 1; i >= 0; i--) {
-        let bolt = lightningBolts[i];
-        // Make bolt fall downward
-        bolt.y += bolt.speed;
-
-        // Draw jagged lightning path
-        stroke(200, 230, 255, bolt.alpha);
-        strokeWeight(2);
-        noFill();
-        beginShape();
-        for (let pt of bolt.points) {
-            vertex(pt.x, pt.y + bolt.y);
-        }
-        endShape();
-
-        // Fade out and remove when invisible or off-screen
-        bolt.alpha -= 1.5;
-        if (bolt.alpha <= 0 || bolt.y > height + 100) {
-            lightningBolts.splice(i, 1);
-        }
-    }
-}
-
-/**
- * TRIANGLE EFFECT- neon pink (key 6 )
- * 
- */
-function updateTriangles(currentMillis) {
-    for (let i = triangles.length - 1; i >= 0; i--) {
-        let tri = triangles[i];
-        let age = (currentMillis - tri.birthTime) / 1000;
-
-        // disapears after 3 seconds
-        if (age > 3) {
-            triangles.splice(i, 1);
-            continue;
-        }
-
-        // opacity with smooth transitions
-        let opacity;
-        if (age < 0.5) {
-            opacity = map(age, 0, 0.5, 0, 255); // Fade in
-        } else if (age > 2) {
-            opacity = map(age, 2, 3, 255, 0); // Fade out
-        } else {
-            opacity = 255; // Full visibility
-        }
-
-        //draw triangle
-        fill(255, 20, 147, opacity);
-        triangle(
-            tri.x, tri.y - tri.size / 2,
-            tri.x - tri.size / 2, tri.y + tri.size / 2,
-            tri.x + tri.size / 2, tri.y + tri.size / 2
-        );
-    }
-}
-
-/**
- * SWIRL EFFECT (Key 7)
- */
-function updateSwirls(currentMillis) {
-    for (let i = swirls.length - 1; i >= 0; i--) {
-        let swirl = swirls[i];
-        let age = (currentMillis - swirl.birthTime) / 1000;
-
-        //leaves after 3 seondds
-        if (age > 3) {
-            swirls.splice(i, 1);
-            continue;
-        }
-
-        // opacity and transition
-        let opacity;
-        if (age < 0.5) opacity = map(age, 0, 0.5, 0, 200);
-        else if (age > 2) opacity = map(age, 2, 3, 200, 0);
-        else opacity = 200;
-
-        // Draw swirling pattern
-        push();
-        translate(swirl.x, swirl.y);
-        noFill();
-        stroke(100, 200, 255, opacity);
-        strokeWeight(1.5);
-
-        // spiral path
-        beginShape();
-        for (let a = 0; a < TWO_PI * 3; a += 0.2) {
-            let r = swirl.size * (0.5 + 0.2 * sin(a * 5 + frameCount * 0.1));
-            vertex(r * cos(a), r * sin(a));
-        }
-        endShape(CLOSE);
-        pop();
-    }
-}
-
-/**
- * Square effect key 8
- */
-function updateSquares(currentMillis) {
-    for (let i = squares.length - 1; i >= 0; i--) {
-        let square = squares[i];
-        let age = (currentMillis - square.birthTime) / 1000;
-
-        // Remove after 3 seconds
-        if (age > 3) {
-            squares.splice(i, 1);
-            continue;
-        }
-
-        // opacity and smoothness
-        let opacity;
-        if (age < 0.5) opacity = map(age, 0, 0.5, 0, 220);
-        else if (age > 2) opacity = map(age, 2, 3, 220, 0);
-        else opacity = 220;
-
-        //draw rotating square
-        fill(255, 165, 0, opacity);
-        rectMode(CENTER);
-        square.rotation += square.rotationSpeed; // Apply rotation
-
-        push();
-        translate(square.x, square.y);
-        rotate(square.rotation);
-        rect(0, 0, square.size, square.size);
-        pop();
-    }
-}
-
 function keyPressed() {
     if (key === '1') {
         pianoSound.play();
         piano();
-    } else if (key === '2') {
+    }
+    if (key === '2') {
         drumSound.play();
         createFirework();
         lastBeatTime = millis();
-    } else if (key === '3') {
+    }
+    if (key === '3') {
         tambourineSound.play();
         createMovingStar();
-    } else if (key === '4') {
-        electricPianoSound.play();
-        stars.push({ x: random(width), y: random(height), size: random(2, 6), birthTime: millis() });
+    }
+    else if (key === '4') {
+        if (guitarSound) guitarSound.play();
+        createGuitarStars();
     } else if (key === '5') {
-        cowbellSound.play();
-        lightningBolts.push({
-            y: 0,
-            speed: random(4, 8),
-            alpha: 255,
-            points: [...Array(5)].map(() => ({ x: random(width), y: random(-50, 50) }))
-        });
+        if (electricPianoSound) electricPianoSound.play();
+        createLightning();
     } else if (key === '6') {
-        marimbaSound.play();
-        triangles.push({ x: random(width), y: random(height), birthTime: millis() });
-        // } else if (key === '7') {
-        //     mandolinSound.play();
-        //     swirls.push({ ... }); 
-        // } else if (key === '8') {
-        //     mandolinSound.play();
-        //     squares.push({ ... });
-        // }
+        if (cowbellSound) cowbellSound.play();
+        createTriangles();
+    } else if (key === '7') {
+        if (marimbaSound) marimbaSound.play();
+        createSwirls();
+    } else if (key === '8') {
+        if (mandolinSound) mandolinSound.play();
+        createSquares();
     }
 }
