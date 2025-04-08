@@ -1,21 +1,15 @@
 // Global variables
 let pianoSound, drumSound, tambourineSound;
-let guitarSound, cowbellSound, marimbaSound, mandolinSound, electricPianoSound;
 let circles = [];
 let fireworks = [];
-let movingStars = []; // Renamed from stars to avoid conflicts
-let twinkling_stars = []; // Renamed for clarity
-let lightningBolts = [];
-let triangles = [];
-let swirls = [];
-let squares = [];
+let stars = [];
 let duration = 3000;
 let beatInterval = 619;
 let lastBeatTime = 0;
 let lastMicrobitData = "000";
 
+
 function preload() {
-    // Load original sounds
     pianoSound = loadSound(
         'assets/piano_med.mp3',
         () => {
@@ -46,63 +40,15 @@ function preload() {
         }
     );
 
-    // Load additional sounds for keys 4-8
-    guitarSound = loadSound(
-        'assets/guitar.mp3',
-        () => {
-            console.log('Guitar sound loaded successfully');
-        },
-        (err) => {
-            console.error('Failed to load guitar sound:', err);
-        }
-    );
-
-    electricPianoSound = loadSound(
-        'assets/electricpiano.mp3',
-        () => {
-            console.log('Electric piano sound loaded successfully');
-        },
-        (err) => {
-            console.error('Failed to load electric piano sound:', err);
-        }
-    );
-
-    cowbellSound = loadSound(
-        'assets/cowbell.mp3',
-        () => {
-            console.log('Cowbell sound loaded successfully');
-        },
-        (err) => {
-            console.error('Failed to load cowbell sound:', err);
-        }
-    );
-
-    marimbaSound = loadSound(
-        'assets/marimba.mp3',
-        () => {
-            console.log('Marimba sound loaded successfully');
-        },
-        (err) => {
-            console.error('Failed to load marimba sound:', err);
-        }
-    );
-
-    mandolinSound = loadSound(
-        'assets/mandolin.mp3',
-        () => {
-            console.log('Mandolin sound loaded successfully');
-        },
-        (err) => {
-            console.error('Failed to load mandolin sound:', err);
-        }
-    );
+    electricPianoSound = loadSound('assets/electricpiano.mp3');
+    cowbellSound = loadSound('assets/cowbell.mp3');
+    marimbaSound = loadSound('assets/marimba.mp3');
+    mandolinSound = loadSound('assets/mandolin.mp3');
 }
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
-    // Set defaults
-    rectMode(CENTER); // Set rectMode to CENTER globally
-    noStroke();
+    background(0);
 
     let button = createButton('Connect Micro:bit');
     button.position(10, 10);
@@ -114,12 +60,11 @@ function windowResized() {
 }
 
 function draw() {
-    // Solid black background to prevent flickering
-    background(0);
-
+    background(0, 25);
     let currentMillis = millis();
 
     // If Micro:bit state has changed, compare the latest data with the previous state.
+    // (Ensure that 'latestData' is defined globally in serial.js.)
     if (typeof latestData !== 'undefined' && latestData !== lastMicrobitData) {
         for (let i = 0; i < 9; i++) {
             if (latestData[i] === '1' && lastMicrobitData[i] === '0') {
@@ -129,7 +74,17 @@ function draw() {
         lastMicrobitData = latestData;
     }
 
-    // PIANO CIRCLE EFFECT (Key 1)
+    updateCircles(currentMillis);
+    updateFireworks(currentMillis);
+    updateTambourineStars(currentMillis);
+    updateStars(currentMillis);
+    updateLightning(currentMillis);
+    updateTriangles(currentMillis);
+    updateSwirls(currentMillis);
+    updateSquares(currentMillis);
+
+
+    // PIANO CIRCLE EFFECT
     for (let i = circles.length - 1; i >= 0; i--) {
         let c = circles[i];
         let progress = (currentMillis - c.startTime) / duration;
@@ -149,7 +104,7 @@ function draw() {
         }
     }
 
-    // DRUM FIREWORK EFFECT (Key 2)
+    // DRUM FIREWORK EFFECT
     for (let i = fireworks.length - 1; i >= 0; i--) {
         let f = fireworks[i];
         let progress = (currentMillis - f.startTime) / 1000;
@@ -165,12 +120,12 @@ function draw() {
         lastBeatTime = currentMillis;
     }
 
-    // TAMBOURINE MOVING STAR EFFECT (Key 3)
-    for (let i = movingStars.length - 1; i >= 0; i--) {
-        let s = movingStars[i];
+    // TAMBOURINE STAR EFFECT
+    for (let i = stars.length - 1; i >= 0; i--) {
+        let s = stars[i];
         let progress = (currentMillis - s.startTime) / 1000;
         if (progress >= 1) {
-            movingStars.splice(i, 1);
+            stars.splice(i, 1);
         } else {
             let x = lerp(s.startX, s.endX, progress);
             let y = lerp(s.startY, s.endY, progress);
@@ -185,24 +140,9 @@ function draw() {
             }
         }
     }
-
-    // GUITAR YELLOW TWINKLING STARS (Key 4)
-    updateTwinklingStars(currentMillis);
-
-    // ELECTRIC PIANO LIGHTNING EFFECT (Key 5)
-    updateLightning(currentMillis);
-
-    // COWBELL TRIANGLE EFFECT (Key 6)
-    updateTriangles(currentMillis);
-
-    // MARIMBA SWIRL EFFECT (Key 7)
-    updateSwirls(currentMillis);
-
-    // MANDOLIN SQUARE EFFECT (Key 8)
-    updateSquares(currentMillis);
 }
 
-// Main function to handle events for both Micro:bit and keyboard
+
 function triggerEvent(index) {
     switch (index) {
         case 0:
@@ -218,33 +158,17 @@ function triggerEvent(index) {
             tambourineSound.play();
             createMovingStar();
             break;
-        case 3: // Key 4
-            guitarSound.play();
-            createGuitarStars();
-            break;
-        case 4: // Key 5
-            electricPianoSound.play();
-            createLightning();
-            break;
-        case 5: // Key 6
-            cowbellSound.play();
-            createTriangles();
-            break;
-        case 6: // Key 7
-            marimbaSound.play();
-            createSwirls();
-            break;
-        case 7: // Key 8
-            mandolinSound.play();
-            createSquares();
-            break;
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
         case 8:
             console.log("Button " + index + " pressed (no action assigned)");
             break;
     }
 }
 
-// ORIGINAL EFFECTS (Keys 1-3)
 function piano() {
     let numCircles = int(random(4, 11));
     for (let i = 0; i < numCircles; i++) {
@@ -275,7 +199,7 @@ function drawFirework(x, y, progress) {
 }
 
 function createMovingStar() {
-    movingStars.push({
+    stars.push({
         startX: random(width),
         startY: random(height),
         endX: random(width),
@@ -294,35 +218,24 @@ function drawStar(x, y, innerRadius, outerRadius, points) {
     endShape(CLOSE);
 }
 
-// NEW EFFECTS (Keys 4-8)
-// GUITAR TWINKLING STARS EFFECT (Key 4)
-function createGuitarStars() {
-    for (let i = 0; i < 20; i++) {
-        twinkling_stars.push({
-            x: random(width),
-            y: random(height),
-            size: random(3, 6),
-            birthTime: millis()
-        });
-    }
-}
-
-function updateTwinklingStars(currentMillis) {
-    for (let i = twinkling_stars.length - 1; i >= 0; i--) {
-        let star = twinkling_stars[i];
-
+/**
+ * STAR EFFECT (Key 4)
+ * Yellow twinkling stars that last 8 seconds
+ */
+function updateStars(currentMillis) {
+    for (let i = stars.length - 1; i >= 0; i--) {
+        let star = stars[i];
         // Calculate age in seconds
         let age = (currentMillis - star.birthTime) / 1000;
 
         // Remove stars older than 8 seconds
         if (age > 8) {
-            twinkling_stars.splice(i, 1);
+            stars.splice(i, 1);
             continue;
         }
 
         // Draw star with slight brightness variation
         fill(255, 255, 0, 255 - random(0, 30));
-        noStroke();
         ellipse(star.x, star.y, star.size, star.size);
 
         // Random twinkling effect
@@ -330,27 +243,10 @@ function updateTwinklingStars(currentMillis) {
     }
 }
 
-// LIGHTNING EFFECT (Key 5)
-function createLightning() {
-    let x = random(width);
-    let points = [createVector(x, 0)];
-
-    // Create jagged path
-    for (let i = 1; i < floor(random(5, 12)); i++) {
-        points.push(createVector(
-            points[i - 1].x + random(-30, 30),
-            points[i - 1].y + random(20, 50)
-        ));
-    }
-
-    lightningBolts.push({
-        points: points,
-        y: 0,
-        speed: random(5, 10),
-        alpha: 255
-    });
-}
-
+/**
+ * LIGHTNING EFFECT (Key 5)
+ * Falling lightning bolts that fade out
+ */
 function updateLightning(currentMillis) {
     for (let i = lightningBolts.length - 1; i >= 0; i--) {
         let bolt = lightningBolts[i];
@@ -375,24 +271,16 @@ function updateLightning(currentMillis) {
     }
 }
 
-// TRIANGLE EFFECT (Key 6)
-function createTriangles() {
-    for (let i = 0; i < 15; i++) {
-        triangles.push({
-            x: random(width),
-            y: random(height),
-            size: random(15, 40),
-            birthTime: millis()
-        });
-    }
-}
-
+/**
+ * TRIANGLE EFFECT- neon pink (key 6 )
+ * 
+ */
 function updateTriangles(currentMillis) {
     for (let i = triangles.length - 1; i >= 0; i--) {
         let tri = triangles[i];
         let age = (currentMillis - tri.birthTime) / 1000;
 
-        // disappears after 3 seconds
+        // disapears after 3 seconds
         if (age > 3) {
             triangles.splice(i, 1);
             continue;
@@ -408,9 +296,8 @@ function updateTriangles(currentMillis) {
             opacity = 255; // Full visibility
         }
 
-        // draw triangle
+        //draw triangle
         fill(255, 20, 147, opacity);
-        noStroke();
         triangle(
             tri.x, tri.y - tri.size / 2,
             tri.x - tri.size / 2, tri.y + tri.size / 2,
@@ -419,24 +306,15 @@ function updateTriangles(currentMillis) {
     }
 }
 
-// SWIRL EFFECT (Key 7)
-function createSwirls() {
-    for (let i = 0; i < 8; i++) {
-        swirls.push({
-            x: random(width),
-            y: random(height),
-            size: random(20, 60),
-            birthTime: millis()
-        });
-    }
-}
-
+/**
+ * SWIRL EFFECT (Key 7)
+ */
 function updateSwirls(currentMillis) {
     for (let i = swirls.length - 1; i >= 0; i--) {
         let swirl = swirls[i];
         let age = (currentMillis - swirl.birthTime) / 1000;
 
-        // leaves after 3 seconds
+        //leaves after 3 seondds
         if (age > 3) {
             swirls.splice(i, 1);
             continue;
@@ -466,24 +344,10 @@ function updateSwirls(currentMillis) {
     }
 }
 
-// SQUARE EFFECT (Key 8)
-function createSquares() {
-    for (let i = 0; i < 12; i++) {
-        squares.push({
-            x: random(width),
-            y: random(height),
-            size: random(15, 45),
-            rotation: random(TWO_PI),
-            rotationSpeed: random(-0.05, 0.05),
-            birthTime: millis()
-        });
-    }
-}
-
+/**
+ * Square effect key 8
+ */
 function updateSquares(currentMillis) {
-    // Temporarily set rectMode to CENTER for drawing squares
-    rectMode(CENTER);
-
     for (let i = squares.length - 1; i >= 0; i--) {
         let square = squares[i];
         let age = (currentMillis - square.birthTime) / 1000;
@@ -500,57 +364,50 @@ function updateSquares(currentMillis) {
         else if (age > 2) opacity = map(age, 2, 3, 220, 0);
         else opacity = 220;
 
-        // draw rotating square
+        //draw rotating square
         fill(255, 165, 0, opacity);
-        noStroke();
+        rectMode(CENTER);
+        square.rotation += square.rotationSpeed; // Apply rotation
 
         push();
         translate(square.x, square.y);
         rotate(square.rotation);
         rect(0, 0, square.size, square.size);
         pop();
-
-        // Update rotation
-        square.rotation += square.rotationSpeed;
     }
 }
 
-// Keyboard event handling for all keys (1-8)
 function keyPressed() {
-    // Original keys (1-3)
     if (key === '1') {
         pianoSound.play();
         piano();
-    }
-    if (key === '2') {
+    } else if (key === '2') {
         drumSound.play();
         createFirework();
         lastBeatTime = millis();
-    }
-    if (key === '3') {
+    } else if (key === '3') {
         tambourineSound.play();
         createMovingStar();
-    }
-
-    // New keys (4-8)
-    if (key === '4') {
-        guitarSound.play();
-        createGuitarStars();
-    }
-    if (key === '5') {
+    } else if (key === '4') {
         electricPianoSound.play();
-        createLightning();
-    }
-    if (key === '6') {
+        stars.push({ x: random(width), y: random(height), size: random(2, 6), birthTime: millis() });
+    } else if (key === '5') {
         cowbellSound.play();
-        createTriangles();
-    }
-    if (key === '7') {
+        lightningBolts.push({
+            y: 0,
+            speed: random(4, 8),
+            alpha: 255,
+            points: [...Array(5)].map(() => ({ x: random(width), y: random(-50, 50) }))
+        });
+    } else if (key === '6') {
         marimbaSound.play();
-        createSwirls();
-    }
-    if (key === '8') {
-        mandolinSound.play();
-        createSquares();
+        triangles.push({ x: random(width), y: random(height), birthTime: millis() });
+        // } else if (key === '7') {
+        //     mandolinSound.play();
+        //     swirls.push({ ... }); 
+        // } else if (key === '8') {
+        //     mandolinSound.play();
+        //     squares.push({ ... });
+        // }
     }
 }
