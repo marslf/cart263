@@ -16,7 +16,7 @@ function preload() {
             console.log('Piano sound loaded successfully');
         },
         (err) => {
-            console.error('Failed to load piano sound:', err);
+            console.error('Failed to load Piano sound:', err);
         }
     );
 
@@ -26,7 +26,7 @@ function preload() {
             console.log('Drum sound loaded successfully');
         },
         (err) => {
-            console.error('Failed to load drum sound:', err);
+            console.error('Failed to load Drum sound:', err);
         }
     );
 
@@ -36,9 +36,70 @@ function preload() {
             console.log('Tambourine sound loaded successfully');
         },
         (err) => {
-            console.error('Failed to load tambourine sound:', err);
+            console.error('Failed to load Tambourine sound:', err);
         }
     );
+
+    GuitarSound = loadSound(
+        'assets/guitar.mp3',
+        () => {
+            console.log('Guitar sound loaded successfully');
+        },
+        (err) => {
+            console.error('Failed to load Guitar sound:', err);
+        }
+    );
+
+    ElectricPianoSound = loadSound(
+        'assets/electricpiano.mp3',
+        () => {
+            console.log('Electric Piano sound loaded successfully');
+        },
+        (err) => {
+            console.error('Failed to load Electric Piano sound:', err);
+        }
+    );
+
+    CowbellSound = loadSound(
+        'assets/cowbell.mp3',
+        () => {
+            console.log('Cowbell sound loaded successfully');
+        },
+        (err) => {
+            console.error('Failed to load Cowbell sound:', err);
+        }
+    );
+
+    MarimbaSound = loadSound(
+        'assets/marimba.mp3',
+        () => {
+            console.log('Marimba sound loaded successfully');
+        },
+        (err) => {
+            console.error('Failed to load Marimba sound:', err);
+        }
+    );
+
+    MandolinSound = loadSound(
+        'assets/mandolin.mp3',
+        () => {
+            console.log('Mandolin sound loaded successfully');
+        },
+        (err) => {
+            console.error('Failed to load Mandolin sound:', err);
+        }
+    );
+
+    BongoSound = loadSound(
+        'assets/bongo.mp3',
+        () => {
+            console.log('Bongo sound loaded successfully');
+        },
+        (err) => {
+            console.error('Failed to load Bongo sound:', err);
+        }
+    );
+
 }
 
 function setup() {
