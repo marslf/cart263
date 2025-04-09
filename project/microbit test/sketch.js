@@ -1,69 +1,72 @@
-let latestData = "0";
-let circleVisible = false;
-let circleStartTime = 0;
-let duration = 2000;
-
+let latestData = "0";  // store current data from microbit
+let circle = null;     // will store the circle to draw
+let duration = 2000;   // how long the circle stays (in ms)
 let port;
-let reader;
-let keepReading = true;
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
-    noStroke();
+    background(0);
 
-    const connectButton = select("#connect");
-    connectButton.mousePressed(connectToMicrobit);
+    let connectButton = createButton("Connect to Micro:bit");
+    connectButton.mousePressed(connectToSerial);
 }
 
 function draw() {
     background(0);
 
-    if (latestData === "1") {
-        circleVisible = true;
-        circleStartTime = millis();
-        latestData = "0"; // reset
-    }
-
-    if (circleVisible) {
-        fill(255, 0, 0);
-        ellipse(width / 2, height / 2, 100);
-
-        if (millis() - circleStartTime > duration) {
-            circleVisible = false;
+    // Draw the circle if it's still active
+    if (circle) {
+        let timeSince = millis() - circle.startTime;
+        if (timeSince < duration) {
+            fill(circle.color);
+            noStroke();
+            ellipse(width / 2, height / 2, 100);
+        } else {
+            circle = null;
         }
     }
 }
 
-// Web Serial Connection
-async function connectToMicrobit() {
-    try {
-        port = await navigator.serial.requestPort();
-        await port.open({ baudRate: 115200 });
-
+function connectToSerial() {
+    navigator.serial.requestPort().then((selectedPort) => {
+        port = selectedPort;
+        return port.open({ baudRate: 115200 });
+    }).then(() => {
         const decoder = new TextDecoderStream();
         const inputDone = port.readable.pipeTo(decoder.writable);
-        reader = decoder.readable.getReader();
+        const inputStream = decoder.readable;
+        const reader = inputStream.getReader();
 
-        readSerialLoop();
-    } catch (err) {
-        console.error("Connection failed: ", err);
-    }
+        console.log("Serial connection established.");
+
+        readLoop(reader);
+    }).catch((err) => {
+        console.error("Serial connection failed:", err);
+    });
 }
 
-async function readSerialLoop() {
-    while (keepReading) {
-        try {
-            const { value, done } = await reader.read();
-            if (done) break;
-            if (value) {
-                let clean = value.trim();
-                if (clean === "1" || clean === "0") {
-                    latestData = clean;
-                }
-            }
-        } catch (err) {
-            console.error("Reading error: ", err);
-            break;
+function readLoop(reader) {
+    reader.read().then(({ value, done }) => {
+        if (done) {
+            console.log("Reader disconnected.");
+            return;
         }
+
+        if (value) {
+            latestData = value.trim();
+            handleMicrobitInput(latestData);
+        }
+
+        readLoop(reader);
+    });
+}
+
+function handleMicrobitInput(data) {
+    if (data === "1") {
+        console.log("Button 1 pressed (pin0)");
+        circle = { color: "red", startTime: millis() };
+    } else if (data === "2") {
+        console.log("Button 2 pressed (pin1)");
+        circle = { color: "blue", startTime: millis() };
     }
 }

@@ -2,15 +2,27 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Microbit Test</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
-    <script src="sketch.js" defer></script>
+    <meta charset="UTF-8" />
+    <title>Microbit Button Test</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
 </head>
 
 <body>
-    <button id="connect">Connect Micro:bit</button>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+    <script src="sketch.js"></script>
 </body>
 
 </html>
