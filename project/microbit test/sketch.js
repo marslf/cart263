@@ -1,6 +1,6 @@
 let latestData = "0";  // store current data from microbit
-let circle = null;     // will store the circle to draw
-let duration = 2000;   // how long the circle stays (in ms)
+let circle = null;
+let duration = 2000;   // how long the circle stays
 let port;
 
 function setup() {
@@ -68,5 +68,8 @@ function handleMicrobitInput(data) {
     } else if (data === "2") {
         console.log("Button 2 pressed (pin1)");
         circle = { color: "blue", startTime: millis() };
+    } else if (data === "3") {
+        console.log("Button 3 pressed (pin2)");
+        circle = { color: "yellow", startTime: millis() };
     }
 }
