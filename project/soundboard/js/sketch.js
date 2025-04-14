@@ -2,7 +2,7 @@
 let pianoSound, drumSound, tambourineSound, guitarSound, electricPianoSound, cowbellSound, marimbaSound, mandolinSound, BongoSound;
 
 let YellowStars = [];        // Yellow stars (key 4)
-//let lightningBolts = [];     // Falling lightning (key 5)
+let lightningBolts = [];     // Falling lightning (key 5)
 let triangles = [];          // Pink triangles (key 6)
 let swirls = [];             // Blue swirls (key 7)
 let squares = [];            // Orange squares (key 8)
@@ -263,6 +263,12 @@ function draw() {
     }
 
     lightningBolts = lightningBolts.filter(bolt => !bolt.finished);
+
+    updateTriangles(currentMillis);
+    updateSwirls(currentMillis);
+    updateSquares(currentMillis);
+    updateYellowStars(currentMillis);
+
 
 }
 

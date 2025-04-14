@@ -1,6 +1,6 @@
 let keys = [];
 let keyWidth, keyHeight;
-let lightningBolts = [];
+// let lightningBolts = [];
 let backgroundColor;
 let latestData = "000";
 let buffer = "";
