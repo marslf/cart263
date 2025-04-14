@@ -1,13 +1,21 @@
 // Global variables
-let pianoSound, drumSound, tambourineSound;
-let circles = [];
-let fireworks = [];
-let stars = [];
+let pianoSound, drumSound, tambourineSound, guitarSound, ElectricPianoSound, cowbellSound, marimbaSound, mandolinSound, BongoSound;
+
+let YellowStars = [];        // Yellow stars (key 4)
+//let lightningBolts = [];     // Falling lightning (key 5)
+let triangles = [];          // Pink triangles (key 6)
+let swirls = [];             // Blue swirls (key 7)
+let squares = [];            // Orange squares (key 8)
+let circles = [];            // Piano circles (key 1)
+let fireworks = [];          // Drum fireworks (key 2)
+let stars = [];              // Tambourine stars (key 3)
+
+// Timing variables
 let duration = 3000;
 let beatInterval = 619;
 let lastBeatTime = 0;
-let lastMicrobitData = "000";
 
+let lastMicrobitData = [];
 
 function preload() {
     pianoSound = loadSound(
@@ -104,14 +112,67 @@ function preload() {
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
+    background(0);
+    noStroke();
 
     let button = createButton('Connect Micro:bit');
     button.position(10, 10);
     button.mousePressed(setupSerial);
+
 }
 
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
+}
+
+function readLoop(reader) {
+    reader.read().then(({ value, done }) => {
+        if (done) {
+            console.log("Reader disconnected.");
+            return;
+        }
+
+        if (value) {
+            latestData = value.trim();
+            handleMicrobitInput(latestData);
+        }
+
+        readLoop(reader);
+    });
+}
+
+function handleMicrobitInput(data) {
+    if (data === "1") {
+        console.log("Button 1 pressed (pin0)");
+        pianoSound.play();
+        piano();
+    } else if (data === "2") {
+        console.log("Button 2 pressed (pin1)");
+        drumSound.play();
+        createFirework();
+        lastBeatTime = millis();
+    } else if (data === "3") {
+        console.log("Button 3 pressed (pin2)");
+        circle = { color: "yellow", startTime: millis() };
+    } else if (data === "4") {
+        console.log("Button 4 pressed (pin7)");
+        circle = { color: "green", startTime: millis() };
+    } else if (data === "5") {
+        console.log("Button 5 pressed (pin9)");
+        circle = { color: "pink", startTime: millis() };
+    } else if (data === "6") {
+        console.log("Button 6 pressed (pin5)");
+        circle = { color: "purple", startTime: millis() };
+    } else if (data === "7") {
+        console.log("Button 7 pressed (pin11)");
+        circle = { color: "orange", startTime: millis() };
+    } else if (data === "8") {
+        console.log("Button 8 pressed (pin8)");
+        circle = { color: "white", startTime: millis() };
+    } else if (data === "9") {
+        console.log("Button 9 pressed (pin12)");
+        circle = { color: "brown", startTime: millis() };
+    }
 }
 
 function draw() {
@@ -128,6 +189,7 @@ function draw() {
         }
         lastMicrobitData = latestData;
     }
+
 
     // PIANO CIRCLE EFFECT
     for (let i = circles.length - 1; i >= 0; i--) {
@@ -184,33 +246,6 @@ function draw() {
                 drawStar(trailX, trailY, 5, 10, 5);
             }
         }
-    }
-}
-
-// Moved outside of draw() to avoid redefinition during each frame.
-function triggerEvent(index) {
-    switch (index) {
-        case 0:
-            pianoSound.play();
-            piano();
-            break;
-        case 1:
-            drumSound.play();
-            createFirework();
-            lastBeatTime = millis();
-            break;
-        case 2:
-            tambourineSound.play();
-            createMovingStar();
-            break;
-        case 3:
-        case 4:
-        case 5:
-        case 6:
-        case 7:
-        case 8:
-            console.log("Button " + index + " pressed (no action assigned)");
-            break;
     }
 }
 

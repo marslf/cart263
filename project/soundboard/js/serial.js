@@ -32,62 +32,61 @@ function setup() {
     keyHeight = height / 4;
     backgroundColor = color(30, 30, 40);
 
-    for (let i = 0; i < 14; i++) {
-        keys.push(new PianoKey(i * keyWidth, height - keyHeight, keyWidth, keyHeight, i));
-    }
+    // for (let i = 0; i < 14; i++) {
+    //     keys.push(new PianoKey(i * keyWidth, height - keyHeight, keyWidth, keyHeight, i));
+    // }
 
-    setInterval(addLightning, 500);
-    setInterval(flashBackground, 1000);
+    // setInterval(addLightning, 500);
+    // setInterval(flashBackground, 1000);
 
-    setupSerial();
+    // setupSerial();
 }
 
-function draw() {
-    background(backgroundColor);
+// function draw() {
+//     background(backgroundColor);
 
-    for (let key of keys) {
-        key.display();
-    }
+//     for (let key of keys) {
+//         key.display();
+//     }
 
-    for (let bolt of lightningBolts) {
-        bolt.update();
-        bolt.display();
-    }
+//     for (let bolt of lightningBolts) {
+//         bolt.update();
+//         bolt.display();
+//     }
 
-    lightningBolts = lightningBolts.filter(bolt => !bolt.finished);
-}
+//     lightningBolts = lightningBolts.filter(bolt => !bolt.finished);
+// }
 
-function flashBackground() {
-    if (random() < 0.3) {
-        backgroundColor = color(255);
-        setTimeout(() => {
-            backgroundColor = color(30, 30, 40);
-        }, 100);
-    }
-}
+// function flashBackground() {
+//     if (random() < 0.3) {
+//         backgroundColor = color(255);
+//         setTimeout(() => {
+//             backgroundColor = color(30, 30, 40);
+//         }, 100);
+//     }
+// }
 
-function addLightning() {
-    if (random() < 0.5) {
-        lightningBolts.push(new Lightning(random(width), 0, random(width), height));
-    }
-}
+// function addLightning() {
+//     if (random() < 0.5) {
+//         lightningBolts.push(new Lightning(random(width), 0, random(width), height));
+//     }
+// }
 
-class PianoKey {
-    constructor(x, y, w, h, index) {
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
-        this.index = index;
-        this.active = false;
-    }
+// class PianoKey {
+//     constructor(x, y, w, h, index) {
+//         this.x = x;
+//         this.y = y;
+//         this.w = w;
+//         this.h = h;
+//         this.index = index;
+//         this.active = false;
+//     }
 
-    display() {
-        stroke(255);
-        fill(this.active ? 'orange' : 'white');
-        rect(this.x, this.y, this.w, this.h);
-    }
-}
+// display() {
+//     stroke(255);
+//     fill(this.active ? 'orange' : 'white');
+//     rect(this.x, this.y, this.w, this.h);
+// }
 
 class Lightning {
     constructor(x1, y1, x2, y2) {
@@ -120,57 +119,28 @@ function keyPressed() {
     }
 }
 
-function triggerKey(index) {
+function triggerEvent(index) {
     keys[index].active = true;
     if (sounds[index]) sounds[index].play();
-    addLightning();
-    flashBackground();
+    //addLightning();
+   //flashBackground();
     setTimeout(() => keys[index].active = false, 200);
 }
 
 async function setupSerial() {
-    if (!("serial" in navigator)) {
-        console.error("Web Serial API not supported. Use Chrome or Edge on a secure origin.");
-        return;
-    }
+    navigator.serial.requestPort().then((selectedPort) => {
+        port = selectedPort;
+        return port.open({ baudRate: 115200 });
+    }).then(() => {
+        const decoder = new TextDecoderStream();
+        const inputDone = port.readable.pipeTo(decoder.writable);
+        const inputStream = decoder.readable;
+        const reader = inputStream.getReader();
 
-    try {
-        serialPort = await navigator.serial.requestPort();
-        await serialPort.open({ baudRate: 115200 });
-        console.log("Serial port opened");
+        console.log("Serial connection established.");
 
-        const textDecoder = new TextDecoderStream();
-        const readableStreamClosed = serialPort.readable.pipeTo(textDecoder.writable);
-        const reader = textDecoder.readable.getReader();
-
-        while (true) {
-            const { value, done } = await reader.read();
-            if (done) {
-                reader.releaseLock();
-                break;
-            }
-            if (value) {
-                buffer += value;
-
-                let lines = buffer.split("\n");
-                buffer = lines.pop();
-
-                for (let line of lines) {
-                    let cleanValue = line.trim();
-                    console.log("Received serial data:", cleanValue);
-
-                    if (cleanValue.length === 3 && /^[01]+$/.test(cleanValue)) {
-                        latestData = cleanValue;
-                        for (let i = 0; i < 3; i++) {
-                            if (latestData[i] === '1') {
-                                triggerKey(i);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    } catch (err) {
-        console.error("Error setting up serial connection: ", err);
-    }
+        readLoop(reader);
+    }).catch((err) => {
+        console.error("Serial connection failed:", err);
+    });
 }

@@ -1,4 +1,4 @@
-let latestData = "0";  // store current data from microbit
+let lastMicrobitData = "0";  // store current data from microbit
 let circle = null;
 let duration = 2000;   // how long the circle stays
 let port;
