@@ -110,22 +110,22 @@ class Lightning {
     }
 }
 
-function keyPressed() {
-    if (key >= '1' && key <= '9') {
-        let index = parseInt(key) - 1;
-        if (index < keys.length) {
-            triggerKey(index);
-        }
-    }
-}
+// function keyPressed() {
+//     if (key >= '1' && key <= '9') {
+//         let index = parseInt(key) - 1;
+//         if (index < keys.length) {
+//             //triggerKey(index);
+//         }
+//     }
+// }
 
-function triggerEvent(index) {
-    keys[index].active = true;
-    if (sounds[index]) sounds[index].play();
-    //addLightning();
-   //flashBackground();
-    setTimeout(() => keys[index].active = false, 200);
-}
+// function triggerEvent(index) {
+//     keys[index].active = true;
+//     if (sounds[index]) sounds[index].play();
+//     //addLightning();
+//    //flashBackground();
+//     setTimeout(() => keys[index].active = false, 200);
+// }
 
 async function setupSerial() {
     navigator.serial.requestPort().then((selectedPort) => {

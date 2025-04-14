@@ -181,14 +181,14 @@ function draw() {
 
     // If Micro:bit state has changed, compare the latest data with the previous state.
     // (Ensure that 'latestData' is defined globally in serial.js.)
-    if (typeof latestData !== 'undefined' && latestData !== lastMicrobitData) {
-        for (let i = 0; i < 9; i++) {
-            if (latestData[i] === '1' && lastMicrobitData[i] === '0') {
-                triggerEvent(i);
-            }
-        }
-        lastMicrobitData = latestData;
-    }
+    // if (typeof latestData !== 'undefined' && latestData !== lastMicrobitData) {
+    //     for (let i = 0; i < 9; i++) {
+    //         if (latestData[i] === '1' && lastMicrobitData[i] === '0') {
+    //             triggerEvent(i);
+    //         }
+    //     }
+    //     lastMicrobitData = latestData;
+    // }
 
 
     // PIANO CIRCLE EFFECT
