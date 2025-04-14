@@ -76,6 +76,18 @@ function handleMicrobitInput(data) {
         circle = { color: "green", startTime: millis() };
     } else if (data === "5") {
         console.log("Button 5 pressed (pin9)");
-        circle = { color: "green", startTime: millis() };
+        circle = { color: "pink", startTime: millis() };
+    } else if (data === "6") {
+        console.log("Button 6 pressed (pin5)");
+        circle = { color: "purple", startTime: millis() };
+    } else if (data === "7") {
+        console.log("Button 7 pressed (pin11)");
+        circle = { color: "orange", startTime: millis() };
+    } else if (data === "8") {
+        console.log("Button 8 pressed (pin8)");
+        circle = { color: "white", startTime: millis() };
+    } else if (data === "9") {
+        console.log("Button 9 pressed (pin12)");
+        circle = { color: "brown", startTime: millis() };
     }
 }
