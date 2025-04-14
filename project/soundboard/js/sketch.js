@@ -1,5 +1,5 @@
 // Global variables
-let pianoSound, drumSound, tambourineSound, guitarSound, ElectricPianoSound, cowbellSound, marimbaSound, mandolinSound, BongoSound;
+let pianoSound, drumSound, tambourineSound, guitarSound, electricPianoSound, cowbellSound, marimbaSound, mandolinSound, BongoSound;
 
 let YellowStars = [];        // Yellow stars (key 4)
 //let lightningBolts = [];     // Falling lightning (key 5)
@@ -58,7 +58,7 @@ function preload() {
         }
     );
 
-    ElectricPianoSound = loadSound(
+    electricPianoSound = loadSound(
         'assets/electricpiano.mp3',
         () => {
             console.log('Electric Piano sound loaded successfully');
@@ -163,7 +163,8 @@ function handleMicrobitInput(data) {
         createGuitarStars();
     } else if (data === "5") {
         console.log("Button 5 pressed (pin9)");
-        circle = { color: "pink", startTime: millis() };
+        electricPianoSound.play();
+        createLightning();
     } else if (data === "6") {
         console.log("Button 6 pressed (pin5)");
         circle = { color: "purple", startTime: millis() };
@@ -251,6 +252,14 @@ function draw() {
             }
         }
     }
+
+    for (let bolt of lightningBolts) {
+        bolt.update();
+        bolt.display();
+    }
+
+    lightningBolts = lightningBolts.filter(bolt => !bolt.finished);
+
 }
 
 function piano() {

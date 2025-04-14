@@ -49,12 +49,12 @@ function setup() {
 //         key.display();
 //     }
 
-//     for (let bolt of lightningBolts) {
-//         bolt.update();
-//         bolt.display();
-//     }
+    // for (let bolt of lightningBolts) {
+    //     bolt.update();
+    //     bolt.display();
+    // }
 
-//     lightningBolts = lightningBolts.filter(bolt => !bolt.finished);
+    // lightningBolts = lightningBolts.filter(bolt => !bolt.finished);
 // }
 
 // function flashBackground() {
@@ -66,11 +66,11 @@ function setup() {
 //     }
 // }
 
-// function addLightning() {
-//     if (random() < 0.5) {
-//         lightningBolts.push(new Lightning(random(width), 0, random(width), height));
-//     }
-// }
+function createLightning() {
+    if (random() < 0.5) {
+        lightningBolts.push(new Lightning(random(width), 0, random(width), height));
+    }
+}
 
 // class PianoKey {
 //     constructor(x, y, w, h, index) {

@@ -50,8 +50,8 @@ function preload() {
     (err) => console.error('Failed to load Guitar sound:', err)
   );
 
-  ElectricPianoSound = loadSound(
-    'assets/electricpiano.mp3',
+  electricPianoSound = loadSound(
+    'assets/electric-piano-jazz.mp3',
     () => console.log('Electric Piano sound loaded successfully'),
     (err) => console.error('Failed to load Electric Piano sound:', err)
   );
@@ -199,7 +199,7 @@ function triggerEvent(index) {
       createGuitarStars();
       break;
     case 4:
-      ElectricPianoSound.play();
+      electricPianoSound.play();
       createLightning();
       break;
     case 5:
@@ -514,7 +514,7 @@ function keyPressed() {
     guitarSound.play();
     createGuitarStars();
   } else if (key === '5') {
-    ElectricPianoSound.play();
+    electricPianoSound.play();
     createLightning();
   } else if (key === '6') {
     cowbellSound.play();
