@@ -48,7 +48,7 @@ function preload() {
         }
     );
 
-    GuitarSound = loadSound(
+    guitarSound = loadSound(
         'assets/guitar.mp3',
         () => {
             console.log('Guitar sound loaded successfully');
@@ -141,6 +141,8 @@ function readLoop(reader) {
     });
 }
 
+
+//MICROBIT INPUT
 function handleMicrobitInput(data) {
     if (data === "1") {
         console.log("Button 1 pressed (pin0)");
@@ -153,10 +155,12 @@ function handleMicrobitInput(data) {
         lastBeatTime = millis();
     } else if (data === "3") {
         console.log("Button 3 pressed (pin2)");
-        circle = { color: "yellow", startTime: millis() };
+        tambourineSound.play();
+        createMovingStar();
     } else if (data === "4") {
         console.log("Button 4 pressed (pin7)");
-        circle = { color: "green", startTime: millis() };
+        guitarSound.play();
+        createGuitarStars();
     } else if (data === "5") {
         console.log("Button 5 pressed (pin9)");
         circle = { color: "pink", startTime: millis() };
@@ -297,6 +301,42 @@ function drawStar(x, y, innerRadius, outerRadius, points) {
     }
     endShape(CLOSE);
 }
+
+// GUITAR EFFECT(Key 4)
+// Yellow twinkling stars that last 8 seconds
+
+function createGuitarStars() {
+    for (let i = 0; i < 20; i++) {
+        YellowStars.push({
+            x: random(width),
+            y: random(height),
+            size: random(3, 6),
+            birthTime: millis()
+        });
+    }
+}
+
+function updateYellowStars(currentMillis) {
+    for (let i = YellowStars.length - 1; i >= 0; i--) {
+        let star = YellowStars[i];
+        // Calculate age in seconds
+        let age = (currentMillis - star.birthTime) / 1000;
+
+        // Remove stars older than 8 seconds
+        if (age > 8) {
+            YellowStars.splice(i, 1);
+            continue;
+        }
+
+        // Draw star with slight brightness variation
+        fill(255, 255, 0, 255 - random(0, 30));
+        ellipse(star.x, star.y, star.size, star.size);
+
+        // Random twinkling effect
+        if (random() < 0.1) star.size = random(2, 6);
+    }
+}
+
 
 function keyPressed() {
     if (key === '1') {
