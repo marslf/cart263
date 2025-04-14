@@ -68,7 +68,7 @@ function preload() {
         }
     );
 
-    CowbellSound = loadSound(
+    cowbellSound = loadSound(
         'assets/cowbell.mp3',
         () => {
             console.log('Cowbell sound loaded successfully');
@@ -167,7 +167,8 @@ function handleMicrobitInput(data) {
         createLightning();
     } else if (data === "6") {
         console.log("Button 6 pressed (pin5)");
-        circle = { color: "purple", startTime: millis() };
+        cowbellSound.play();
+        createTriangles();
     } else if (data === "7") {
         console.log("Button 7 pressed (pin11)");
         circle = { color: "orange", startTime: millis() };
@@ -346,6 +347,143 @@ function updateYellowStars(currentMillis) {
     }
 }
 
+function createTriangles() {
+    for (let i = 0; i < 15; i++) {
+        triangles.push({
+            x: random(width),
+            y: random(height),
+            size: random(15, 40),
+            birthTime: millis()
+        });
+    }
+}
+
+function updateTriangles(currentMillis) {
+    for (let i = triangles.length - 1; i >= 0; i--) {
+        let tri = triangles[i];
+        let age = (currentMillis - tri.birthTime) / 1000;
+
+        // Disappears after 3 seconds
+        if (age > 3) {
+            triangles.splice(i, 1);
+            continue;
+        }
+
+        // Opacity with smooth transitions
+        let opacity;
+        if (age < 0.5) {
+            opacity = map(age, 0, 0.5, 0, 255); // Fade in
+        } else if (age > 2) {
+            opacity = map(age, 2, 3, 255, 0); // Fade out
+        } else {
+            opacity = 255; // Full visibility
+        }
+
+        // Draw triangle
+        fill(255, 20, 147, opacity);
+        noStroke();
+        triangle(
+            tri.x, tri.y - tri.size / 2,
+            tri.x - tri.size / 2, tri.y + tri.size / 2,
+            tri.x + tri.size / 2, tri.y + tri.size / 2
+        );
+    }
+}
+
+/**
+ * SWIRL EFFECT (Key 7)
+ */
+function createSwirls() {
+    for (let i = 0; i < 8; i++) {
+        swirls.push({
+            x: random(width),
+            y: random(height),
+            size: random(20, 60),
+            birthTime: millis()
+        });
+    }
+}
+
+function updateSwirls(currentMillis) {
+    for (let i = swirls.length - 1; i >= 0; i--) {
+        let swirl = swirls[i];
+        let age = (currentMillis - swirl.birthTime) / 1000;
+
+        // Leaves after 3 seconds
+        if (age > 3) {
+            swirls.splice(i, 1);
+            continue;
+        }
+
+        // Opacity and transition
+        let opacity;
+        if (age < 0.5) opacity = map(age, 0, 0.5, 0, 200);
+        else if (age > 2) opacity = map(age, 2, 3, 200, 0);
+        else opacity = 200;
+
+        // Draw swirling pattern
+        push();
+        translate(swirl.x, swirl.y);
+        noFill();
+        stroke(100, 200, 255, opacity);
+        strokeWeight(1.5);
+
+        // Spiral path
+        beginShape();
+        for (let a = 0; a < TWO_PI * 3; a += 0.2) {
+            let r = swirl.size * (0.5 + 0.2 * sin(a * 5 + frameCount * 0.1));
+            vertex(r * cos(a), r * sin(a));
+        }
+        endShape(CLOSE);
+        pop();
+    }
+}
+
+/**
+ * Square effect (key 8)
+ */
+function createSquares() {
+    for (let i = 0; i < 12; i++) {
+        squares.push({
+            x: random(width),
+            y: random(height),
+            size: random(15, 45),
+            rotation: random(TWO_PI),
+            rotationSpeed: random(-0.05, 0.05),
+            birthTime: millis()
+        });
+    }
+}
+
+function updateSquares(currentMillis) {
+    for (let i = squares.length - 1; i >= 0; i--) {
+        let square = squares[i];
+        let age = (currentMillis - square.birthTime) / 1000;
+
+        // Remove after 3 seconds
+        if (age > 3) {
+            squares.splice(i, 1);
+            continue;
+        }
+
+        // Opacity and smoothness
+        let opacity;
+        if (age < 0.5) opacity = map(age, 0, 0.5, 0, 220);
+        else if (age > 2) opacity = map(age, 2, 3, 220, 0);
+        else opacity = 220;
+
+        // Draw rotating square
+        fill(255, 165, 0, opacity);
+        rectMode(CENTER);
+        square.rotation += square.rotationSpeed; // Apply rotation
+
+        push();
+        translate(square.x, square.y);
+        rotate(square.rotation);
+        rect(0, 0, square.size, square.size);
+        pop();
+    }
+}
 
 function keyPressed() {
     if (key === '1') {
