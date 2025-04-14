@@ -78,7 +78,7 @@ function preload() {
         }
     );
 
-    MarimbaSound = loadSound(
+    marimbaSound = loadSound(
         'assets/marimba.mp3',
         () => {
             console.log('Marimba sound loaded successfully');
@@ -88,7 +88,7 @@ function preload() {
         }
     );
 
-    MandolinSound = loadSound(
+    mandolinSound = loadSound(
         'assets/mandolin.mp3',
         () => {
             console.log('Mandolin sound loaded successfully');
@@ -98,7 +98,7 @@ function preload() {
         }
     );
 
-    BongoSound = loadSound(
+    bongoSound = loadSound(
         'assets/bongo.mp3',
         () => {
             console.log('Bongo sound loaded successfully');
@@ -171,13 +171,16 @@ function handleMicrobitInput(data) {
         createTriangles();
     } else if (data === "7") {
         console.log("Button 7 pressed (pin11)");
-        circle = { color: "orange", startTime: millis() };
+        marimbaSound.play();
+        createSwirls();
     } else if (data === "8") {
         console.log("Button 8 pressed (pin8)");
-        circle = { color: "white", startTime: millis() };
+        mandolinSound.play();
+        createSquares();
     } else if (data === "9") {
         console.log("Button 9 pressed (pin12)");
-        circle = { color: "brown", startTime: millis() };
+        bongoSound.play();
+        //bongoAnimation
     }
 }
 
