@@ -9,6 +9,7 @@ let squares = [];            // Orange squares (key 8)
 let circles = [];            // Piano circles (key 1)
 let fireworks = [];          // Drum fireworks (key 2)
 let stars = [];              // Tambourine stars (key 3)
+let bongos = []; //bongo pulse (key 9)
 
 // Timing variables
 let duration = 3000;
@@ -180,7 +181,7 @@ function handleMicrobitInput(data) {
     } else if (data === "9") {
         console.log("Button 9 pressed (pin12)");
         bongoSound.play();
-        //bongoAnimation
+        createBongoPulses();
     }
 }
 
@@ -268,6 +269,7 @@ function draw() {
     updateSwirls(currentMillis);
     updateSquares(currentMillis);
     updateYellowStars(currentMillis);
+    updateBongos(currentMillis);
 
 
 }
@@ -493,6 +495,40 @@ function updateSquares(currentMillis) {
         pop();
     }
 }
+
+function createBongoPulses() {
+    for (let i = 0; i < 5; i++) {
+        bongos.push({
+            x: random(width),
+            y: random(height),
+            startTime: millis(),
+            color: color(random(200, 255), random(50, 150), 0)
+        });
+    }
+}
+
+function updateBongos(currentMillis) {
+    for (let i = bongos.length - 1; i >= 0; i--) {
+        let b = bongos[i];
+        let age = (currentMillis - b.startTime) / 1000;
+
+        if (age > 2) {
+            bongos.splice(i, 1);
+            continue;
+        }
+
+        let pulse = map(age, 0, 2, 0, 100);
+        let alpha = map(age, 0, 2, 255, 0);
+
+        noFill();
+        stroke(b.color.levels[0], b.color.levels[1], b.color.levels[2], alpha);
+        strokeWeight(4);
+        ellipse(b.x, b.y, pulse * 2);
+    }
+}
+
+
+//DEBUGGING WITH KEYBOARD NUMBER KEYS
 
 function keyPressed() {
     if (key === '1') {
