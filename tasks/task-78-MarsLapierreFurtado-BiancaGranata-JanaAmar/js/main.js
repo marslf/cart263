@@ -37,6 +37,22 @@ window.onload = async function () {
         const hasPetalLengthGreaterThan10 = irisesWithColors.some(iris => iris.petalLength > 10);
         console.log("6- Is there an iris with petalLength > 10?", hasPetalLengthGreaterThan10);
 
+        //7- Some() = 4.2
+        const hasPetalLengthEqual42 = irisesWithColors.some(iris => iris.petalLength === 4.2);
+        console.log("7- Is there an iris with petalLength == 4.2?", hasPetalLengthEqual42);
+
+        //8- Every() pedalWidth < 3
+        const allPetalWidthsLessThan3 = irisesWithColors.every(iris => iris.petalWidth < 3);
+        console.log("8- Do all irises have petalWidth < 3?", allPetalWidthsLessThan3);
+
+        //9- Every() sepalWidth > 1.2
+        const allSepalWidthsGreaterThan12 = irisesWithColors.every(iris => iris.sepalWidth > 1.2);
+        console.log("Do all irises have sepalWidth > 1.2?", allSepalWidthsGreaterThan12);
+
+        //10- toSorted() irises sorted 
+        const irisesWithColorsSorted = irisesWithColors.toSorted((a, b) => a.petalWidth - b.petalWidth);
+        console.log("9- Irises sorted by petalWidth:", irisesWithColorsSorted);
+
 
     } catch (error) {
         console.error("Error loading iris data:", error);
