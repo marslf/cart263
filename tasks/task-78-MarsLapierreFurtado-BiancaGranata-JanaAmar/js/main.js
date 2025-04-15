@@ -29,9 +29,13 @@ window.onload = async function () {
         const averagePetalLength = totalPetalLength / irisesWithColors.length;
         console.log("4- Average petalLength:", averagePetalLength);
 
-        //5- Find()
+        //5- Find() > 1.0
         const irisWithLargePetalWidth = irisesWithColors.find(iris => iris.petalWidth > 1.0);
         console.log("5- Iris with petalWidth > 1.0:", irisWithLargePetalWidth);
+
+        //6- Some() > 10
+        const hasPetalLengthGreaterThan10 = irisesWithColors.some(iris => iris.petalLength > 10);
+        console.log("6- Is there an iris with petalLength > 10?", hasPetalLengthGreaterThan10);
 
 
     } catch (error) {
