@@ -1,13 +1,5 @@
 let possibleColor = ["#5d3fd3", "#a73fd3", "#d33fb5", "#d35d3f", "#d3a73f"];
 
-const irisesWithColors = irisData.map(iris => {
-    //2- Map() = Randomly select color from array
-    const randomIndex = Math.floor(Math.random() * possibleColor.length);
-    return { ...iris, color: possibleColor[randomIndex] };
-});
-
-console.log("Irises with Colors:", irisesWithColors);
-
 window.onload = async function () {
     console.log("task 7-8");
 
@@ -15,9 +7,21 @@ window.onload = async function () {
     try {
         const response = await fetch("data/iris.json");
         const irisData = await response.json();
-        console.log("Iris data loaded:", irisData);
+        console.log("1- Iris data loaded:", irisData);
+
+        //2- Create new array with random colors
+        const irisesWithColors = irisData.map(iris => {
+            const randomIndex = Math.floor(Math.random() * possibleColor.length);
+            return { ...iris, color: possibleColor[randomIndex] };
+        });
+
+        console.log("2- Irises with Colors:", irisesWithColors);
+
+        const filteredIrises = irisesWithColors.filter(iris => iris.sepalWidth < 4);
+        console.log("3- Filtered Irises (sepalWidth < 4):", filteredIrises);
 
     } catch (error) {
         console.error("Error loading iris data:", error);
     }
+
 }
