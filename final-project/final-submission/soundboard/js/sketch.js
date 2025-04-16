@@ -189,18 +189,6 @@ function draw() {
     background(0);
     let currentMillis = millis();
 
-    // If Micro:bit state has changed, compare the latest data with the previous state.
-    // (Ensure that 'latestData' is defined globally in serial.js.)
-    // if (typeof latestData !== 'undefined' && latestData !== lastMicrobitData) {
-    //     for (let i = 0; i < 9; i++) {
-    //         if (latestData[i] === '1' && lastMicrobitData[i] === '0') {
-    //             triggerEvent(i);
-    //         }
-    //     }
-    //     lastMicrobitData = latestData;
-    // }
-
-
     // PIANO CIRCLE EFFECT
     for (let i = circles.length - 1; i >= 0; i--) {
         let c = circles[i];
@@ -528,36 +516,45 @@ function updateBongos(currentMillis) {
 }
 
 
-//DEBUGGING WITH KEYBOARD NUMBER KEYS
+//USE KEYBOARD KEYS TO TEST OUT WITHOUT SOUNDBOARD
 
 function keyPressed() {
     if (key === '1') {
+        console.log("Key 1 pressed")
         pianoSound.play();
         piano();
-    }
-    if (key === '2') {
+    } else if (key === '2') {
+        console.log("Key 2 pressed")
         drumSound.play();
         createFirework();
         lastBeatTime = millis();
-    }
-    if (key === '3') {
+    } else if (key === '3') {
+        console.log("Key 3 pressed")
         tambourineSound.play();
         createMovingStar();
+    } else if (key === '4') {
+        console.log("Key 4 pressed")
+        guitarSound.play();
+        createGuitarStars();
+    } else if (key === '5') {
+        console.log("Key 5 pressed")
+        electricPianoSound.play();
+        createLightning();
+    } else if (key === '6') {
+        console.log("Key 6 pressed")
+        cowbellSound.play();
+        createTriangles();
+    } else if (key === '7') {
+        console.log("Key 7 pressed")
+        marimbaSound.play();
+        createSwirls();
+    } else if (key === '8') {
+        console.log("Key 8 pressed")
+        mandolinSound.play();
+        createSquares();
+    } else if (key === '9') {
+        console.log("Key 9 pressed")
+        bongoSound.play();
+        createBongoPulses();
     }
-    //     else if (key === '4') {
-    //         if (guitarSound) guitarSound.play();
-    //         createGuitarStars();
-    //     } else if (key === '5') {
-    //         if (electricPianoSound) electricPianoSound.play();
-    //         createLightning();
-    //     } else if (key === '6') {
-    //         if (cowbellSound) cowbellSound.play();
-    //         createTriangles();
-    //     } else if (key === '7') {
-    //         if (marimbaSound) marimbaSound.play();
-    //         createSwirls();
-    //     } else if (key === '8') {
-    //         if (mandolinSound) mandolinSound.play();
-    //         createSquares();
-    //     }
 }

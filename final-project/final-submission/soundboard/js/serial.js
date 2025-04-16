@@ -31,62 +31,13 @@ function setup() {
     keyWidth = width / 14;
     keyHeight = height / 4;
     backgroundColor = color(30, 30, 40);
-
-    // for (let i = 0; i < 14; i++) {
-    //     keys.push(new PianoKey(i * keyWidth, height - keyHeight, keyWidth, keyHeight, i));
-    // }
-
-    // setInterval(addLightning, 500);
-    // setInterval(flashBackground, 1000);
-
-    // setupSerial();
 }
-
-// function draw() {
-//     background(backgroundColor);
-
-//     for (let key of keys) {
-//         key.display();
-//     }
-
-    // for (let bolt of lightningBolts) {
-    //     bolt.update();
-    //     bolt.display();
-    // }
-
-    // lightningBolts = lightningBolts.filter(bolt => !bolt.finished);
-// }
-
-// function flashBackground() {
-//     if (random() < 0.3) {
-//         backgroundColor = color(255);
-//         setTimeout(() => {
-//             backgroundColor = color(30, 30, 40);
-//         }, 100);
-//     }
-// }
 
 function createLightning() {
     if (random() < 0.5) {
         lightningBolts.push(new Lightning(random(width), 0, random(width), height));
     }
 }
-
-// class PianoKey {
-//     constructor(x, y, w, h, index) {
-//         this.x = x;
-//         this.y = y;
-//         this.w = w;
-//         this.h = h;
-//         this.index = index;
-//         this.active = false;
-//     }
-
-// display() {
-//     stroke(255);
-//     fill(this.active ? 'orange' : 'white');
-//     rect(this.x, this.y, this.w, this.h);
-// }
 
 class Lightning {
     constructor(x1, y1, x2, y2) {
@@ -109,23 +60,6 @@ class Lightning {
         line(this.x1, this.y1, this.x2, this.y2);
     }
 }
-
-// function keyPressed() {
-//     if (key >= '1' && key <= '9') {
-//         let index = parseInt(key) - 1;
-//         if (index < keys.length) {
-//             //triggerKey(index);
-//         }
-//     }
-// }
-
-// function triggerEvent(index) {
-//     keys[index].active = true;
-//     if (sounds[index]) sounds[index].play();
-//     //addLightning();
-//    //flashBackground();
-//     setTimeout(() => keys[index].active = false, 200);
-// }
 
 async function setupSerial() {
     navigator.serial.requestPort().then((selectedPort) => {
